@@ -1,0 +1,21 @@
+*{
+    margin:0;
+    padding:0;
+}
+nav{
+    background-color:lightgreen;
+}
+.derecha{
+    display:flex;
+    justify-content:flex-end;
+}
+#carouselExampleSlidesOnly img{
+    height:250px;
+}
+/*Movil*/
+@include media-breakpoint-up(sm) {
+    /*Tablet*/
+}
+@include media-breakpoint-up(md){
+    /*Desktop*/
+}
