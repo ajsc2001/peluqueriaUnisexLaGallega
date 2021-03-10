@@ -9,6 +9,9 @@ nav{
     display:flex;
     justify-content:flex-end;
 }
+.rojo{
+    color:red;
+}
 .active{
     font-weight:bold;
 }
@@ -22,15 +25,20 @@ h1, section{
     margin-top:2rem;
 }
 section{
+    margin:1rem;
     display:flex;
     flex-direction:column;
     align-items:center;
 }
-section article:nth-child(1n+2){
-    margin-top:1rem;
-}
 article{
+    margin:1rem;
     width:50%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+article:nth-child(1n+2){
+    margin-top:1rem;
 }
 p{/*no se si a esto tendré que cambiarle el selector para el resto de páginas*/
     text-align:justify;
@@ -42,9 +50,22 @@ footer p{
     margin:0;
 }
 /*Movil*/
-@include media-breakpoint-up(sm) {
+/*@include media-breakpoint-up(sm) {*/
+@media (min-width:576px){
     /*Tablet*/
+    section{
+        flex-direction:row;
+        flex-wrap:wrap;
+        justify-content:space-around;
+    }
+    article{
+        width:40%;
+    }
 }
-@include media-breakpoint-up(md){
+/*@include media-breakpoint-up(md){*/
+@media (min-width:768px){/*o 992px*/
     /*Desktop*/
+    #carouselExampleSlidesOnly img{
+        height:25rem;/**/
+    }
 }

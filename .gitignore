@@ -1,6 +1,5 @@
 #Esto es un acceso directo para abrir la web desde xampp
 *.url
-#En la carpteta de recursos se encuentran algunas librerías como boostrap, jquery, etc
-recursos/
+#Carpetas
 documentacion/
 img/
