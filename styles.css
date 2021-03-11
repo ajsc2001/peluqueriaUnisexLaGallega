@@ -2,18 +2,21 @@
     margin:0;
     padding:0;
 }
-nav{
+header nav{
     background-color:lightgreen;
 }
 .derecha{
     display:flex;
     justify-content:flex-end;
 }
-.rojo{
-    color:red;
-}
 .active{
     font-weight:bold;
+}
+.logo{
+    max-width:15rem;
+}
+.logo img{
+    width:100%;
 }
 #carouselExampleSlidesOnly img{
     height:15rem;/**/
@@ -44,10 +47,21 @@ p{/*no se si a esto tendré que cambiarle el selector para el resto de páginas*
     text-align:justify;
 }
 footer{
+    padding:0.5rem;
+    color:lightgreen;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+footer nav a{
     color:lightgreen;
 }
-footer p{
-    margin:0;
+#redesSociales{
+    display:flex;
+    flex-direction:row;
+}
+#redesSociales img{
+    max-width:3rem;
 }
 /*Movil*/
 /*@include media-breakpoint-up(sm) {*/
@@ -60,6 +74,10 @@ footer p{
     }
     article{
         width:40%;
+    }
+    footer{
+        flex-direction:row;
+        justify-content:space-around;
     }
 }
 /*@include media-breakpoint-up(md){*/
