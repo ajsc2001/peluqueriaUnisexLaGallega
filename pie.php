@@ -1,10 +1,10 @@
     <footer class=".container-fluid bg-dark">
         <nav class="nav flex-column">
-            <a class="nav-link" aria-current="page" href="index.php">Home</a>
-            <a class="nav-link" href="horario.php">Horario</a>
-            <a class="nav-link" href="citas.php">Citas</a>
-            <a class="nav-link" href="contacto.php">Contacto</a>
-            <a class="nav-link" href="login.php">Log In</a>
+            <a class="nav-link<?php if (!isset($_GET['p'])) {echo " active";} ?>" <?php if (!isset($_GET['p'])) {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>">Home</a>
+            <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="horario") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="horario") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=horario">Horario</a>
+            <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="citas") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="citas") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=citas">Citas</a>
+            <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="contacto") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="contacto") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">Contacto</a>
+            <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=login">Log In</a>
         </nav>
         <section class="logo">
             <img src="img/imagendeprueba.jpg" alt="LOGO">esto seria el logo

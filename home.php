@@ -1,4 +1,4 @@
-<h1 class="text-center">Servicios que se realizan:</h1>
+<h1>Servicios que se realizan:</h1>
 <section>
     <article>
         <h2 class="text-center">Cortes de pelo</h2>

@@ -1,3 +1,4 @@
+<h1>Contacto:</h1>
 <section>
     <article id='verde'>
         <p>Nombre: <input type="text" name="" id=""></p>
