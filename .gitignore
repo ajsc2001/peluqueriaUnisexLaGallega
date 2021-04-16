@@ -1,5 +1,3 @@
 #Esto es un acceso directo para abrir la web desde xampp
 *.url
-#Carpetas
-documentacion/
-img/
+#Carpetas: nombre/
