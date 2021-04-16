@@ -1,6 +1,8 @@
 <section>
     <article>
-        calendario
+    <article>
+        <div id="datepicker"></div><!--$( ".selector" ).datepicker( "getDate" );      coge fecha-->
+    </article>
     </article>
     <article id='verde'>
         <h1>Pedir cita</h1>

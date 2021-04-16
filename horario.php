@@ -1,6 +1,6 @@
 <section>
     <article>
-        calendario
+        <div id="datepicker"></div><!--$( ".selector" ).datepicker( "getDate" );      coge fecha-->
     </article>
     <article id='verde'>
         <h1>Horario</h1>

@@ -7,15 +7,15 @@
             <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=login">Log In</a>
         </nav>
         <section class="logo">
-            <img src="img/imagendeprueba.jpg" alt="LOGO">esto seria el logo
-            poner por alguna parte algo de copyright
+            <img src="img/logo.png" alt="LOGO">
         </section>
         <section id="redesSociales">
             <a href=""><img src="img/whatsapp-logo.png" alt="Whatsapp"></a>
-            <a href=""><img src="img/facebook-logo.jpg" alt="Facebook"></a>
-            <a href=""><img src="img/instagram-logo.jpg" alt="Instagram"></a>
+            <a href=""><img src="img/facebook-logo.png" alt="Facebook"></a>
+            <a href=""><img src="img/instagram-logo.png" alt="Instagram"></a>
         </section>
     </footer>
+    <!--poner por alguna parte algo de copyright-->
 </body>
 
 </html>

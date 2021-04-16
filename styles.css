@@ -4,10 +4,13 @@
 }
 p{/*no se si a esto tendré que cambiarle el selector para el resto de páginas*/
     text-align:justify;
-    font-size:1.25em;
 }
-header nav{
+header nav, .dropdown-menu[data-bs-popper]{
     background-color:lightgreen;
+    font-size:1.5vw;
+}
+.navbar{
+    padding:0;
 }
 .derecha{
     display:flex;
@@ -16,11 +19,30 @@ header nav{
 .active{
     font-weight:bold;
 }
-.logo{
+header .logo{
+    /*max-width:10rem;*/
+    width:10vw;
+}
+footer .logo{
     max-width:15rem;
+    background-color:white;
+    border-radius:10rem;
 }
 .logo img{
     width:100%;
+}
+.nav-item{
+    padding:0.5rem;
+}
+.nav-link{
+    padding:1rem 0;
+}
+.nav-link:hover, .dropdown-item:hover{
+    background-color: tomato;
+    color: lightgreen!important;
+}
+.dropdown-item.active, .dropdown-item:active{
+    background-color:lightgreen;
 }
 #carouselExampleSlidesOnly img{
     height:15rem;/**/
@@ -33,6 +55,9 @@ h1, section{
 }
 h1{
     text-align:center;
+}
+h2{
+    margin-bottom:1rem;
 }
 section{
     margin:1rem;
@@ -49,7 +74,10 @@ article{
     width:75%;
     display:flex;
     flex-direction:column;
-    align-items:center;
+    align-items:center;/*Esto hace  ue los P de la home algunos se queden mas centrados ya que nos son tan largos*/
+}
+article img{
+    border-radius:5vw;
 }
 #verde{
     background-color:lightgreen;
@@ -58,6 +86,11 @@ article{
 #verde h1{
     margin-top:0;
     margin-bottom:0.5rem;
+}
+#verde form{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 }
 #horario{
     width:100%;
@@ -73,11 +106,6 @@ article{
 #horario p:nth-child(2n){
     background-color:green;
     padding-left:1rem;
-}
-#verde form{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
 }
 #motivos{
     display:flex;
@@ -113,6 +141,25 @@ footer{
     flex-direction:column;
     align-items:center;
 }
+
+
+
+
+
+
+
+
+footer section{
+    margin:0!important;
+}
+
+
+
+
+
+
+
+
 footer nav a{
     color:lightgreen;
 }
