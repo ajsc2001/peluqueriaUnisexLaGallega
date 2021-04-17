@@ -1,5 +1,5 @@
 <h1>Mis datos:</h1>
-<section id="modificarCuenta">
+<section id="cuenta">
     <!--Poner nada mas entrar los datos de la cuenta y un boton para editar datos, será cuando aparezca el formulario siguiente-->
     <article id="verde"><!--No se si por defecto poner los datos de esa cuenta-->
         <h2>Modificar datos:</h2>

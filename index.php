@@ -1,4 +1,5 @@
 <?php
+    require "lib/conexion.php";
     require "cabecera.php";
 ?>
     <main class=".container-fluid">

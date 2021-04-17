@@ -59,6 +59,9 @@ h1{
 h2{
     margin-bottom:1rem;
 }
+.centrarAlert{
+    text-align:center;
+}
 section{
     margin:1rem;
     display:flex;
@@ -90,7 +93,11 @@ article img{
 #verde form{
     display:flex;
     flex-direction:column;
-    align-items:center;
+}
+form p{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
 }
 #horario{
     width:100%;
@@ -177,16 +184,22 @@ footer nav a{
         justify-content:space-around;
         align-items:stretch;
     }
-    #login, #crearUsuario, #modificarCuenta, #reservas{
-        text-align:center;
-        flex-direction:column;
-        align-items: center;
-    }
     article{
         width:45%;
     }
     #horario p{
         width:50%;
+    }
+    #login, #crearUsuario, #cuenta, #reservas{
+        text-align:center;
+        flex-direction:column;
+        align-items: center;
+    }
+    form p{
+        flex-direction:row;
+    }
+    form p input{
+        margin-left:1rem;
     }
     footer{
         flex-direction:row;
