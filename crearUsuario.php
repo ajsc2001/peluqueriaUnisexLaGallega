@@ -15,15 +15,14 @@ require "class/usuario.php";
 		}
 		return $msg;
 	}
-    $tipo = "root";//provisional
 	$nombre = "";
 	$apellidos = "";
     $edad = "";
 	$email = "";
     $telefono = "";
     $nick = "";
-	$password = "";
-	$password2 = "";
+	$contraseña = "";
+	$contraseña2 = "";
 	if (isset($_POST['crear'])) {
 		$nombre = htmlspecialchars(trim($_POST['nombre']));
 		$apellidos = htmlspecialchars(trim($_POST['apellidos']));
@@ -45,7 +44,7 @@ require "class/usuario.php";
 		<?php
 	}else{
 		if (isset($_POST['nick'])) {//si existe uno de los parametros que hay entonces creo user
-			$usuario = new Usuario("",$tipo,$nombre,$apellidos,$edad,$email,$telefono,$nick,$contraseña);
+			$usuario = new Usuario("",$_SESSION["tipo"],$nombre,$apellidos,$edad,$email,$telefono,$nick,$contraseña);
 			if ($usuario->crearUsuario()) {
 				?>
 				<div class="alert alert-success centrarAlert" role="alert">

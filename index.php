@@ -1,4 +1,8 @@
 <?php
+    session_start();
+    if (!isset($_SESSION["tipo"])) {
+        $_SESSION["tipo"] = "root";
+    }//poner else con los demas tipos de usuario
     require "lib/conexion.php";
     require "cabecera.php";
 ?>
@@ -20,9 +24,13 @@
                 require "cuenta.php";
             }else if (isset($_GET['p'])&& $_GET['p']=="reservas") {
                 require "reservas.php";
+            }else if (isset($_GET['p'])&& $_GET['p']=="administracion") {
+                require "administracion.php";
             }else if (isset($_GET['p'])&& $_GET['p']=="logout") {
                 echo "Cerrar sesión y redirigir a la HOME";
-                //require "logout.php";
+                //elimino todas las variables de sesion y creo unicamente el tipo
+                session_unset();
+				header("Location: index.php");
             }
         ?>
     </main>

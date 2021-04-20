@@ -6,18 +6,20 @@ require "class/usuario.php";
 		}
 		return true;
 	}
-    $tipo = "root";//provicional
 	$nick = "";
 	$contraseña = "";
 	if (isset($_POST['login'])) {
 		$nick = htmlspecialchars(trim($_POST['nick']));
 		$contraseña = htmlspecialchars(trim($_POST['contraseña']));
 		if (validarDatos($_POST)) {
-			$usuario = new Usuario("",$tipo,"","","","","",$nick,$contraseña);
+			$usuario = new Usuario("",$_SESSION["tipo"],"","","","","",$nick,$contraseña);
 			if ($usuario->existe()) {
-                $usuario->recuperarDatos();
+                $usuario->login();
                 //crear sesion del objeto
-                echo "LOGIN CORRECTO";//quitar y poner el nombre arriba
+				$_SESSION["id"] = $usuario->get_id();
+				$_SESSION["tipo"] = $usuario->get_tipo();
+				$_SESSION["nombre"] = $usuario->get_nombre();
+				header("Location: index.php");
 			}else{
                 ?>
 				<div class="alert alert-danger centrarAlert" role="alert">
@@ -36,8 +38,6 @@ require "class/usuario.php";
 			</div>
 			<?php
 		}
-		//redirigir al chat tanto si el email no es correcto como si la contraseña no coincide
-		//header("Location: index.php");
 	}
 ?>
 <h1>Iniciar sesión:</h1>

@@ -50,17 +50,27 @@ if (isset($_GET['p'])&&($_GET['p']=="horario"||$_GET['p']=="citas")) {
                         <li class="nav-item">
                             <a class="nav-link text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="contacto") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="contacto") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">Contacto</a>
                         </li>
+                    <?php
+                    if (!isset($_SESSION["nombre"])) {
+                    ?>
                         <li class="nav-item">
                             <a class="nav-link text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=login">Iniciar sesión</a>
                         </li>
+                    <?php
+                    }else{
+                    ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hola, <strong>{NOMBRE}</strong></a>
+                            <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hola, <strong><?php echo $_SESSION['nombre'] ?></strong></a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="administracion") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="administracion") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion">Administración</a></li>
                                 <li><a class="dropdown-item text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="cuenta") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="cuenta") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Mi cuenta</a></li>
                                 <li><a class="dropdown-item text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="reservas") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="reservas") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas">Mis reservas</a></li>
                                 <li><a class="dropdown-item text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="logout") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="logout") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=logout">Cerrar sesión</a></li>
                             </ul>
                         </li>
+                    <?php
+                    }
+                    ?>
                     </ul>
                 </div>
             </div>
