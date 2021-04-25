@@ -22,6 +22,11 @@ if (isset($_GET['p'])&&($_GET['p']=="horario"||$_GET['p']=="citas")) {
     <script src="recursos/calendario.js"></script>
     <?php
 }
+if (isset($_GET['p'])&&$_GET['p']=="cuenta") {
+    ?>
+    <script src="recursos/eliminarUsuario.js"></script>
+    <?php
+}
 ?>
     <!--Mis archivos-->
     <link rel="stylesheet" href="styles.css">
@@ -62,6 +67,10 @@ if (isset($_GET['p'])&&($_GET['p']=="horario"||$_GET['p']=="citas")) {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hola, <strong><?php echo $_SESSION['nombre'] ?></strong></a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+
+
+                            <!--para pagina admin condicion solo disponible para Administradores-->
                                 <li><a class="dropdown-item text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="administracion") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="administracion") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion">Administración</a></li>
                                 <li><a class="dropdown-item text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="cuenta") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="cuenta") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Mi cuenta</a></li>
                                 <li><a class="dropdown-item text-danger<?php if (isset($_GET['p'])&&$_GET['p']=="reservas") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="reservas") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas">Mis reservas</a></li>

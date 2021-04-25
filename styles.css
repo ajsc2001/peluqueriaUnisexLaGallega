@@ -100,6 +100,12 @@ form p{
     flex-direction:column;
     justify-content:space-between;
 }
+#modificaciones{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
 #horario{
     width:100%;
     display:flex;
@@ -149,6 +155,14 @@ footer{
     flex-direction:column;
     align-items:center;
 }
+#modificaciones form{
+    display:flex;
+    align-items:center;
+}
+table{
+    text-align: center;
+    max-width:95%;
+}
 
 
 
@@ -194,11 +208,15 @@ footer nav a{
     #login, #crearUsuario, #cuenta, #reservas, #admin{
         text-align:center;
         flex-direction:column;
-        align-items: center;
+        align-items:center;
+    }
+    #administracion form{
+        width:100%;
+        flex-direction:row;
+        justify-content:space-around;
     }
     #administracion{
-        flex-direction:row;
-        justify-content:space-between;
+        width:100%;
     }
     form p{
         flex-direction:row;

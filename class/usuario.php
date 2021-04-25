@@ -10,7 +10,8 @@ require "lib/codificacion.php";
 		private $telefono;
 		private $nick;
 		private $contraseña;
-		function __construct($id="",$tipo="",$nombre="",$apellidos="",$edad="",$email="",$telefono="",$nick="",$contraseña=""){
+		//cambiar tipo usuario por defecto a visitante
+		function __construct($id="",$tipo="root",$nombre="",$apellidos="",$edad="",$email="",$telefono="",$nick="",$contraseña=""){
 			$this->id = $id;
 			$this->tipo = $tipo;
 			$this->nombre = $nombre;
@@ -131,19 +132,12 @@ require "lib/codificacion.php";
 				}else{
 					$fila = $result->fetch_assoc();
 					//si la fila tiene mi id entonces actualizo igualmente
-					if ($fila['id']==$_SESSION['id']) {
+					if ($fila['id']==$this->id) {
 						$this->modificarDatos();
 						return true;
 					}else{
 						return false;
 					}
-
-
-
-
-
-
-
 				}
 			}
 			$result->free();//no se si hay que ponerlo
@@ -152,6 +146,12 @@ require "lib/codificacion.php";
 		function modificarDatos(){
 			$conexion = Conexion::conectarBD($this->tipo);
 			$sql = "UPDATE usuarios SET tipo='$this->tipo', nick='$this->nick',  contraseña='".encripta($this->contraseña,"encriptando")."', email='$this->email', telefono='$this->telefono', nombre='$this->nombre', apellidos='$this->apellidos', edad='$this->edad' WHERE id='".$_SESSION['id']."'";
+			$conexion->query($sql);
+			Conexion::desconectarBD($conexion);
+		}
+		function eliminarUsuario(){
+			$conexion = Conexion::conectarBD($this->tipo);
+			$sql = "DELETE FROM usuarios WHERE id='".$_SESSION['id']."'";
 			$conexion->query($sql);
 			Conexion::desconectarBD($conexion);
 		}

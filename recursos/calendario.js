@@ -13,11 +13,29 @@ $.datepicker.regional['es'] = {
     firstDay: 1,
     isRTL: false,
     showMonthAfterYear: false,
-    yearSuffix: ''
+    yearSuffix: '',
+    showButtonPanel: true
 };
 $.datepicker.setDefaults($.datepicker.regional['es']);
 $(function() {
     $("#datepicker").datepicker({
-        showButtonPanel: true
-    });
+        onSelect: function(dateText, inst) {
+           var fecha = $(this).datepicker( 'getDate' ); //usa objeto date
+           var diasSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+           alert(diasSemana[fecha.getDay()]);
+           $.ajax({
+               // aqui va la ubicación de la página PHP
+               url: 'http://localhost/peluqueriaUnisexLaGallega/index.php?p=horario',
+               type: 'POST',
+               data: diasSemana[fecha.getDay()],
+               dataType: 'html',
+               data: { condicion: "datosDia"},
+               success:function(resultado){
+                   // imprime "resultado Funcion"
+                   console.log(resultado);
+                   $(location).attr('href','http://localhost/peluqueriaUnisexLaGallega/index.php?p=horario&d=' + diasSemana[fecha.getDay()]);
+                }
+            })
+        }
+     });
 });

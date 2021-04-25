@@ -15,62 +15,80 @@ function validarDatos($datos){
     }
     return $msg;
 }
-//coger datos usuario
-$usuario = new Usuario($_SESSION["id"],$_SESSION['tipo'],"","","","","","","");
-$usuario->recuperarDatos();
-$nombre = $usuario->get_nombre();
-$apellidos = $usuario->get_apellidos();
-$edad = $usuario->get_edad();
-$email = $usuario->get_email();
-$telefono = $usuario->get_telefono();
-$nick = $usuario->get_nick();
-$contraseña = "";
-$contraseña2 = "";
-if (isset($_POST['modificar'])) {
-    $nombre = htmlspecialchars(trim($_POST['nombre']));
-	$apellidos = htmlspecialchars(trim($_POST['apellidos']));
-	$edad = htmlspecialchars(trim($_POST['edad']));
-	$email = htmlspecialchars(trim($_POST['email']));
-	$telefono = htmlspecialchars(trim($_POST['telefono']));
-	$nick = htmlspecialchars(trim($_POST['nick']));
-	$contraseña = htmlspecialchars(trim($_POST['contraseña']));
-	$contraseña2 = htmlspecialchars(trim($_POST['contraseña2']));
-	$msg = validarDatos($_POST);
-    if (isset($msg)&&!empty($msg)) {
-		?>
-		<div class="alert alert-danger centrarAlert" role="alert">
-			<?php
-			echo "$msg";
-			?>
-		</div>
-		<?php
-	}else{
-		if (isset($_POST['nick'])) {//si existe uno de los parametros que hay entonces creo user
-            //revisar como hacer lo de usuario, crear sets o hacer otra  variable de usuario
-			$usuario = new Usuario("",$_SESSION["tipo"],$nombre,$apellidos,$edad,$email,$telefono,$nick,$contraseña);
-			if ($usuario->modificarUsuario()) {
-                //crear sesion del objeto
-				//$_SESSION["id"] = $usuario->get_id();
-				$_SESSION["tipo"] = $usuario->get_tipo();
-				$_SESSION["nombre"] = $usuario->get_nombre();
-				?>
-				<div class="alert alert-success centrarAlert" role="alert">
-					<?php
-					echo "Datos del usuario modificados.";
-					?>
-				</div>
-				<?php
-			}else{
-				?>
-				<div class="alert alert-danger centrarAlert" role="alert">
-					<?php
-					echo "Imposible modificar usuario, el email o el nombre de usuario esta siendo utilizado.";
-					?>
-				</div>
-				<?php
-			}
-		}
-	}
+function eliminarUsuario(){
+    $usuario = new Usuario($_SESSION['id'],$_SESSION['tipo'],"","","","","","","");
+    $usuario->eliminarUsuario();
+    session_unset();
+}
+if(isset($_REQUEST["condicion"])){
+    // si llega la condicion, y es igual a la condicion que necesitas para entrar ejecuta la función y devuelve el resultado
+    if($_REQUEST["condicion"] == "eliminarUsuario" ){
+       echo eliminarUsuario();
+       // salimos de la pagina php y devolvemos la respuesta
+       exit();
+    }else{
+       echo "otra funcion o respuesta";
+       // salimos de la pagina php y devolvemos la respuesta
+       exit();
+    }
+}else{
+    //coger datos usuario
+    $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo'],"","","","","","","");
+    $usuario->recuperarDatos();
+    $nombre = $usuario->get_nombre();
+    $apellidos = $usuario->get_apellidos();
+    $edad = $usuario->get_edad();
+    $email = $usuario->get_email();
+    $telefono = $usuario->get_telefono();
+    $nick = $usuario->get_nick();
+    $contraseña = "";
+    $contraseña2 = "";
+    if (isset($_POST['modificar'])) {
+        $nombre = htmlspecialchars(trim($_POST['nombre']));
+	    $apellidos = htmlspecialchars(trim($_POST['apellidos']));
+	    $edad = htmlspecialchars(trim($_POST['edad']));
+	    $email = htmlspecialchars(trim($_POST['email']));
+	    $telefono = htmlspecialchars(trim($_POST['telefono']));
+	    $nick = htmlspecialchars(trim($_POST['nick']));
+	    $contraseña = htmlspecialchars(trim($_POST['contraseña']));
+	    $contraseña2 = htmlspecialchars(trim($_POST['contraseña2']));
+	    $msg = validarDatos($_POST);
+        if (isset($msg)&&!empty($msg)) {
+		    ?>
+		    <div class="alert alert-danger centrarAlert" role="alert">
+			    <?php
+			    echo "$msg";
+			    ?>
+		    </div>
+		    <?php
+	    }else{
+		    if (isset($_POST['nick'])) {//si existe uno de los parametros que hay entonces creo user
+                //revisar como hacer lo de usuario, crear sets o hacer otra  variable de usuario
+			    $usuario = new Usuario($_SESSION["id"],$_SESSION["tipo"],$nombre,$apellidos,$edad,$email,$telefono,$nick,$contraseña);
+			    if ($usuario->modificarUsuario()) {
+                    //crear sesion del objeto
+				    $_SESSION["id"] = $usuario->get_id();
+				    $_SESSION["tipo"] = $usuario->get_tipo();
+				    $_SESSION["nombre"] = $usuario->get_nombre();
+				    ?>
+				    <div class="alert alert-success centrarAlert" role="alert">
+					    <?php
+					    echo "Datos del usuario modificados. Algunos de ellos serán visibles cuando realices la siguiente acción";
+					    ?>
+				    </div>
+				    <?php
+			    }else{
+				    ?>
+				    <div class="alert alert-danger centrarAlert" role="alert">
+					    <?php
+					    echo "Imposible modificar usuario, el email o el nombre de usuario esta siendo utilizado.";
+					    ?>
+				    </div>
+				    <?php
+			    }
+		    }
+	    }
+    }
 }
 ?>
 <h1>Mis datos:</h1>
@@ -117,5 +135,5 @@ if (!isset($_POST['modificando'])&&(!isset($msg)||empty($msg))) {
 
 
     <!--Eliminar cuanta desde la función de eliminar cuenta y redirigir a la home-->
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Eliminar cuenta</a>
+    <a id="eliminarUsuario" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Eliminar cuenta</a>
 </section>
