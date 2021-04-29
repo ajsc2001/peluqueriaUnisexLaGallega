@@ -1,7 +1,8 @@
 <?php
     session_start();
+    ob_start();
     if (!isset($_SESSION["tipo"])) {
-        $_SESSION["tipo"] = "root";
+        $_SESSION["tipo"] = "Cliente";
     }//poner else con los demas tipos de usuario
     require "lib/conexion.php";
     require "cabecera.php";
@@ -27,7 +28,6 @@
             }else if (isset($_GET['p'])&& $_GET['p']=="administracion") {
                 require "administracion.php";
             }else if (isset($_GET['p'])&& $_GET['p']=="logout") {
-                echo "Cerrar sesión y redirigir a la HOME";
                 //elimino todas las variables de sesion y creo unicamente el tipo
                 session_unset();
 				header("Location: index.php");
@@ -36,4 +36,5 @@
     </main>
 <?php
     require "pie.php";
+    ob_end_flush();
 ?>

@@ -11,7 +11,7 @@ require "lib/codificacion.php";
 		private $nick;
 		private $contraseña;
 		//cambiar tipo usuario por defecto a visitante
-		function __construct($id="",$tipo="root",$nombre="",$apellidos="",$edad="",$email="",$telefono="",$nick="",$contraseña=""){
+		function __construct($id="",$tipo="Cliente",$nombre="",$apellidos="",$edad="",$email="",$telefono="",$nick="",$contraseña=""){
 			$this->id = $id;
 			$this->tipo = $tipo;
 			$this->nombre = $nombre;
@@ -47,18 +47,26 @@ require "lib/codificacion.php";
 			return $this->nick;
 		}
 		function crearUsuario(){
-			$conexion = Conexion::conectarBD($this->tipo);
-			$sql = "SELECT * FROM usuarios WHERE email='$this->email' OR nick='$this->nick'";
-			if ($result = $conexion->query($sql)) {
-				if ($result->num_rows<1) {
-					$this->añadirUsuario();
-					return true;
-				}else{
-					return false;
+			$usuarios = $this->obtenerUsuarios();
+			if (!count($usuarios)<1) {
+				$conexion = Conexion::conectarBD($this->tipo);
+				$sql = "SELECT * FROM usuarios WHERE email='$this->email' OR nick='$this->nick'";
+				if ($result = $conexion->query($sql)) {
+					if ($result->num_rows<1) {
+						$this->añadirUsuario();
+						return true;
+					}else{
+						return false;
+					}
 				}
+				$result->free();//no se si hay que ponerlo
+				Conexion::desconectarBD($conexion);
+			}else{
+				$this->tipo = "Administrador";
+				$this->añadirUsuario();
+				return true;
 			}
-			$result->free();//no se si hay que ponerlo
-			Conexion::desconectarBD($conexion);
+			
 		}
 		function añadirUsuario(){
 			$conexion = Conexion::conectarBD($this->tipo);
@@ -84,6 +92,21 @@ require "lib/codificacion.php";
 			}
 			$result->free();
 			Conexion::desconectarBD($conexion);
+		}
+		function obtenerUsuarios(){
+			$usuarios = array();
+			$conexion = Conexion::conectarBD($this->tipo);
+			$sql = "SELECT * FROM usuarios";
+			$result = $conexion->query($sql);
+			if (!$result->num_rows<1) {
+				while ($fila = $result->fetch_assoc()) {
+					//los añado al objeto
+					array_push($usuarios,$fila);
+				};
+			}
+			$result->free();//no se si hay que ponerlo
+			Conexion::desconectarBD($conexion);
+			return $usuarios;
 		}
 		function login(){
 			$conexion = Conexion::conectarBD($this->tipo);

@@ -9,7 +9,7 @@ Class Horario{
     private $sabado;
     private $domingo;
     //poner usuario de visitante como base
-    function __construct($tipo_usr="root",$lunes=array(),$martes=array(),$miercoles=array(),$jueves=array(),$viernes=array(),$sabado=array(),$domingo=array()){
+    function __construct($tipo_usr="Cliente",$lunes=array(),$martes=array(),$miercoles=array(),$jueves=array(),$viernes=array(),$sabado=array(),$domingo=array()){
 		$this->tipo_usr = $tipo_usr;
 		$this->lunes = $lunes;
 		$this->martes = $martes;

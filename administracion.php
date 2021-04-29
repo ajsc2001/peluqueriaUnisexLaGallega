@@ -1,9 +1,39 @@
 <?php
-if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
-    require "class/horario.php";
+if (isset($_POST['usuarios'])||isset($_POST['añadirYModificarUsuarios'])) {
+    require "class/usuario.php";
 }
 if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
     require "class/servicio.php";
+
+
+
+
+    function eliminarServicio(){
+        $servicio = new Servicio($_SESSION['tipo'],$_REQUEST['id']);
+        $servicio->eliminarServicio();
+        //////////////
+        /*$usuario = new Usuario($_SESSION['id'],$_SESSION['tipo'],"","","","","","","");
+        $usuario->eliminarUsuario();
+        session_unset();*/
+    }
+    if(isset($_REQUEST["condicion"])){
+        // si llega la condicion, y es igual a la condicion que necesitas para entrar ejecuta la función y devuelve el resultado        
+        if($_REQUEST["condicion"] == "eliminar" ){
+           echo eliminarServicio();
+           // salimos de la pagina php y devolvemos la respuesta
+           exit();
+        }else{
+           echo "otra funcion o respuesta";
+           // salimos de la pagina php y devolvemos la respuesta
+           exit();
+        }
+    }
+
+
+
+}
+if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
+    require "class/horario.php";
 }
 ?>
 <section id='admin'>
@@ -17,7 +47,328 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
     </article>
 </section>
 <section id="modificaciones">
+
+
+
+
+
 <?php
+if (isset($_POST['usuarios'])) {
+    $tipos_usr = array(
+        "Administrador",
+        "Trabajador",
+        "Cliente"
+    );
+    $usuario = new Usuario("",$_SESSION['tipo']);
+    if ($usuario->obtenerUsuarios()) {
+        $usuarios = $usuario->obtenerUsuarios();
+    }
+    ?>
+    <!--<div class="table-responsive">-->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-danger" scope="col">USUARIOS</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Nick</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Edad</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            if ($usuario->obtenerUsuarios()) {/*Count usuarios*/
+                foreach ($usuarios as $key => $value) {
+                    ?>
+                    <tr>
+                    <?php
+                    foreach ($value as $key2 => $value2){
+                        if ($key2!="contraseña") {
+                            if ($key2=="tipo") {
+                            ?>
+                            <td>
+                                <select id="<?php echo $value['id'] ?>" name="<?php echo $key2.$value['id'] ?>">
+                                <?php
+                                foreach ($tipos_usr as $tipo){
+                                    echo "<option value='$tipo'";
+                                    if ($tipo==substr($value2, 0, -3)) {
+                                        echo "selected='selected'";
+                                    }
+                                    echo ">$tipo</option>";
+                                }
+                                ?>
+                                </select>
+                            </td>
+                            <?php
+                            }else{
+                                ?>
+                                <td><?php echo $value2 ?></td>
+                                <?php
+                            }
+                        } 
+                    }
+                    ?>
+                    <!--añadir el form y el input hidden con el id-->
+                    <!--como se va a hacer por ajax, solomente hará falta añadirle un id al elemento i, para despues desde js cogerlo-->
+                        <td>
+                        <!--ponerle un enlace a la papelera a ver si asi funciona...-->
+                        <!--<a id="eliminarUsuario" href="<?php/* echo $_SERVER['PHP_SELF'] */?>?p=cuenta">Eliminar cuenta</a>-->
+                            <i id="<?php echo $value['id'] ?>" class="fas fa-trash-alt text-danger servicio"></i>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }
+            ?>
+            </tbody>
+        </table>
+    <!--</div>-->
+    <?php
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
+    $servicio = new Servicio($_SESSION['tipo']);
+    if (!$servicio->obtenerServicios()) {
+        if (isset($_POST['servicios'])) {
+            ?>
+            <div class="alert alert-warning centrarAlert" role="alert">
+                No hay ningún servicio disponible. Creelo.
+            </div>
+            <?php
+        }
+    }else{
+        $servicios = $servicio->obtenerServicios();
+    }
+    if (isset($_POST['añadirYModificarServicios'])) {
+        function validarServiciosExistentes($datos){
+            foreach($datos as $dato){
+                if (empty($dato)) {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+        function validarServiciosNuevos($datos){
+            $cont = 0;
+            foreach($datos as $key => $value){
+                if (empty($value)) {
+                    $cont++;
+                }
+            }
+            if ($cont!=0) {
+                return false;
+            }
+            return true;
+        }
+        $serviciosExistentes = array_slice($_POST, 0, -3);
+        $serviciosNuevos = array_slice($_POST, -3, -1);
+        if (!validarServiciosExistentes($serviciosExistentes)) {
+            ?>
+            <div class="alert alert-danger centrarAlert" role="alert">
+                Los campos que tengan a su izquierda un número asignado no pueden estar vacios. Revise todos los campos que haya modificado.
+            </div>
+            <?php
+        }else{
+            $nuevos = validarServiciosNuevos($serviciosNuevos);
+            if (!$nuevos) {
+                ?>
+                <div class="alert alert-danger centrarAlert" role="alert">
+                    Si rellena un campo de la última fila tiene que rellenar el resto de campos. Revise todos los campos que haya modificado.
+                </div>
+                <?php
+            }else{
+                $msg = "";
+                if ($servicio->obtenerServicios()) {
+                    //modifico los ya existentes
+                    for ($i=0; $i < count($servicios); $i++) { 
+                        $servicio = new Servicio($_SESSION['tipo'],$servicios[$i]['id'],array_shift($serviciosExistentes),array_shift($serviciosExistentes));
+                        $servicio->modificarServicio();
+                    }
+                    $msg .= "Los datos de servicios anteriores han sido actualizados";
+                }
+                if ($nuevos) {
+                    //creo el nuevo servicio
+                    $servicio = new Servicio($_SESSION['tipo'],"",array_shift($serviciosNuevos),array_shift($serviciosNuevos));
+                    if ($servicio->nuevoServicio()) {
+                        if (strlen($msg)) {
+                            $msg .= " y se ha añadido un nuevo servicio.";
+                        }else{
+                            $msg .= "Se ha añadido un nuevo servicio.";
+                        }
+				        ?>
+			            <div class="alert alert-success centrarAlert" role="alert">
+				            <?php
+                            echo $msg;
+                            ?>
+                        </div>
+                        <?php
+                    }else{
+                        if (strlen($msg)) {
+                            $msg .= " pero el nuevo servicio no se ha añadido porque ya que existia.";
+                        }else{
+                            $msg .= "No se ha añadido el nuevo servicio porque ya que existia.";
+                        }
+                        ?>
+			            <div class="alert alert-warning centrarAlert" role="alert">
+				            <?php
+                            echo $msg;
+                            ?>
+                        </div>
+                        <?php
+                    }  
+                }
+            }
+        }
+    }
+    $horas = array(
+        "00:15",
+        "00:30",
+        "00:45",
+        "01:00",
+        "01:15",
+        "01:30",
+        "01:45",
+        "02:00",
+        "02:15",
+        "02:30",
+        "02:45",
+        "03:00",
+        "03:15",
+        "03:30",
+        "03:45",
+        "04:00"
+    );
+    if ($servicio->obtenerServicios()) {
+        $servicios = $servicio->obtenerServicios();
+    }
+    ?>
+    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion" method="POST">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-danger" scope="col">SERVICIOS</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tiempo necesario</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            if ($servicio->obtenerServicios()) {
+                foreach ($servicios as $key => $value) {
+                    ?>
+                    <tr>
+                    <?php
+                    foreach ($value as $key2 => $value2){
+                        if ($key2=="tiempo") {
+                        ?>
+                        <td>
+                            <select name="<?php echo $key2.$value['id'] ?>">
+                            <?php
+                            foreach ($horas as $hora){
+                                echo "<option value='$hora'";
+                                if ($hora==substr($value2, 0, -3)) {
+                                    echo "selected='selected'";
+                                }
+                                echo ">$hora</option>";
+                            }
+                            ?>
+                            </select>
+                        </td>
+                        <?php
+                        }else if ($key2!="id") {
+                            ?>
+                            <td><input type="text" name="<?php echo $key2.$value['id'] ?>" value="<?php echo $value2 ?>"></td>
+                            <?php
+                        }else{
+                            ?>
+                            <td><?php echo $value2 ?></td>
+                            <?php
+                        }
+                    }
+                    ?>
+                    <!--añadir el form y el input hidden con el id-->
+                    <!--como se va a hacer por ajax, solomente hará falta añadirle un id al elemento i, para despues desde js cogerlo-->
+                        <td>
+                        <!--ponerle un enlace a la papelera a ver si asi funciona...-->
+                        <!--<a id="eliminarUsuario" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Eliminar cuenta</a>-->
+                            <i id="<?php echo $value['id'] ?>" class="fas fa-trash-alt text-danger servicio"></i>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }
+            ?>
+                <tr>
+                    <td>Nuevo servicio:</td>
+                    <td><input type="text" name="nombre" value=""></td>
+                    <td>
+                        <select name="tiempo">
+                            <option value=""></option>
+                            <?php
+                            foreach ($horas as $hora){
+                                ?>
+                                <option value="<?php echo $hora ?>"><?php echo $hora ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" name="añadirYModificarServicios" value="Añadir / Modificar servicios">
+    </form>
+    <?php
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if (isset($_POST['modificarHorario'])) {
     $semana = array(
         "Lunes" => array(
@@ -77,7 +428,7 @@ if (isset($_POST['modificarHorario'])) {
             "cerrado" => isset($_POST['cerradoDomingo'])
         )
     );
-    $horario = new Horario($_SESSION['tipo'],$semana['Lunes'],$semana['Martes'],$semana['Miércoles'],$semana['Jueves'],$semana['Viernes'],$semana['Sábado'],$semana['Domingo'],);
+    $horario = new Horario($_SESSION['tipo'],$semana['Lunes'],$semana['Martes'],$semana['Miércoles'],$semana['Jueves'],$semana['Viernes'],$semana['Sábado'],$semana['Domingo']);
     $horario->modificarDias();
 ?>
 <div class="alert alert-success centrarAlert" role="alert">
@@ -264,214 +615,6 @@ if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
             </tbody>
         </table>
         <input type="submit" name="modificarHorario" value="Modificar horario">
-    </form>
-    <?php
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
-    $servicio = new Servicio($_SESSION['tipo']);
-    if (!$servicio->obtenerServicios()) {
-        if (isset($_POST['servicios'])) {
-            ?>
-            <div class="alert alert-warning centrarAlert" role="alert">
-                No hay ningún servicio disponible. Creelo.
-            </div>
-            <?php
-        }
-    }else{
-        $servicios = $servicio->obtenerServicios();
-    }
-    if (isset($_POST['añadirYModificarServicios'])) {
-        function validarServiciosExistentes($datos){
-            foreach($datos as $dato){
-                if (empty($dato)) {
-                    return false;
-                }
-
-            }
-            return true;
-        }
-        function validarServiciosNuevos($datos){
-            $cont = 0;
-            foreach($datos as $key => $value){
-                if (empty($value)) {
-                    $cont++;
-                }
-            }
-            if ($cont!=0) {
-                return false;
-            }
-            return true;
-        }
-        $serviciosExistentes = array_slice($_POST, 0, -3);
-        $serviciosNuevos = array_slice($_POST, -3, -1);
-        if (!validarServiciosExistentes($serviciosExistentes)) {
-            ?>
-            <div class="alert alert-danger centrarAlert" role="alert">
-                Los campos que tengan a su izquierda un número asignado no pueden estar vacios. Revise todos los campos que haya modificado.
-            </div>
-            <?php
-        }else{
-            $nuevos = validarServiciosNuevos($serviciosNuevos);
-            if (!$nuevos) {
-                ?>
-                <div class="alert alert-danger centrarAlert" role="alert">
-                    Si rellena un campo de la última fila tiene que rellenar el resto de campos. Revise todos los campos que haya modificado.
-                </div>
-                <?php
-            }else{
-                $msg = "";
-                if ($servicio->obtenerServicios()) {
-                    //modifico los ya existentes
-                    for ($i=0; $i < count($servicios); $i++) { 
-                        $servicio = new Servicio($_SESSION['tipo'],$servicios[$i]['id'],array_shift($serviciosExistentes),array_shift($serviciosExistentes));
-                        $servicio->modificarServicio();
-                    }
-                    $msg .= "Los datos de servicios anteriores han sido actualizados";
-                }
-                if ($nuevos) {
-                    //creo el nuevo servicio
-                    $servicio = new Servicio($_SESSION['tipo'],"",array_shift($serviciosNuevos),array_shift($serviciosNuevos));
-                    if ($servicio->nuevoServicio()) {
-                        if (strlen($msg)) {
-                            $msg .= " y se ha añadido un nuevo servicio.";
-                        }else{
-                            $msg .= "Se ha añadido un nuevo servicio.";
-                        }
-				        ?>
-			            <div class="alert alert-success centrarAlert" role="alert">
-				            <?php
-                            echo $msg;
-                            ?>
-                        </div>
-                        <?php
-                    }else{
-                        if (strlen($msg)) {
-                            $msg .= " pero el nuevo servicio no se ha añadido porque ya que existia.";
-                        }else{
-                            $msg .= "No se ha añadido el nuevo servicio porque ya que existia.";
-                        }
-                        ?>
-			            <div class="alert alert-warning centrarAlert" role="alert">
-				            <?php
-                            echo $msg;
-                            ?>
-                        </div>
-                        <?php
-                    }  
-                }
-            }
-        }
-    }
-    $horas = array(
-        "00:15",
-        "00:30",
-        "00:45",
-        "01:00",
-        "01:15",
-        "01:30",
-        "01:45",
-        "02:00",
-        "02:15",
-        "02:30",
-        "02:45",
-        "03:00",
-        "03:15",
-        "03:30",
-        "03:45",
-        "04:00"
-    );
-    if ($servicio->obtenerServicios()) {
-        $servicios = $servicio->obtenerServicios();
-    }
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion" method="POST">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th class="text-danger" scope="col">SERVICIOS</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Tiempo necesario</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-            if ($servicio->obtenerServicios()) {
-                foreach ($servicios as $key => $value) {
-                    ?>
-                    <tr>
-                    <?php
-                    foreach ($value as $key2 => $value2){
-                        if ($key2=="tiempo") {
-                        ?>
-                        <td>
-                            <select name="<?php echo $key2.$value['id'] ?>">
-                            <?php
-                            foreach ($horas as $hora){
-                                echo "<option value='$hora'";
-                                if ($hora==substr($value2, 0, -3)) {
-                                    echo "selected='selected'";
-                                }
-                                echo ">$hora</option>";
-                            }
-                            ?>
-                            </select>
-                        </td>
-                        <?php
-                        }else if ($key2!="id") {
-                            ?>
-                            <td><input type="text" name="<?php echo $key2.$value['id'] ?>" value="<?php echo $value2 ?>"></td>
-                            <?php
-                        }else{
-                            ?>
-                            <td><?php echo $value2 ?></td>
-                            <?php
-                        }
-                    }
-                    ?>
-                    </tr>
-                    <?php
-                }
-            }
-            ?>
-                <tr>
-                    <td>Nuevo servicio:</td>
-                    <td><input type="text" name="nombre" value=""></td>
-                    <td>
-                        <select name="tiempo">
-                            <option value=""></option>
-                            <?php
-                            foreach ($horas as $hora){
-                                ?>
-                                <option value="<?php echo $hora ?>"><?php echo $hora ?></option>
-                                <?php
-                            }
-                            ?>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <input type="submit" name="añadirYModificarServicios" value="Añadir / Modificar servicios">
     </form>
     <?php
 }

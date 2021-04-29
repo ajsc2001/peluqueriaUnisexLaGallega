@@ -1,11 +1,113 @@
+<?php
+require "class/usuario.php";
+function validarDatos($datos){
+    $msg = "";
+    if (empty($datos['nombreCompleto'])||empty($datos['email'])||empty($datos['mensaje'])) {
+        $msg = "Faltan datos por rellenar.";
+    }else{
+        if (!preg_match('/^[(a-z0-9\_\-\.)]+@[(a-z0-9\_\-\.)]+\.[(a-z)]{2,15}$/i',$datos['email'])) {
+            $msg = "Formato email incorrecto.";
+        }
+    }
+    return $msg;
+}
+$nombre = "";
+$apellidos = "";//solo se usa para cargarlo automaticamente
+$email = "";
+$mensaje = "";
+if (isset($_SESSION['id'])) {
+    $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo'],"","","","","","","");
+    $usuario->recuperarDatos();
+    $nombre = $usuario->get_nombre();
+    $apellidos = $usuario->get_apellidos();
+    $email = $usuario->get_email();
+}
+if (isset($_POST['enviar'])) {
+    $nombre = htmlspecialchars(trim($_POST['nombreCompleto']));
+    $email = htmlspecialchars(trim($_POST['email']));
+    $mensaje = htmlspecialchars(trim($_POST['mensaje']));
+    $msg = validarDatos($_POST);
+    if (isset($msg)&&!empty($msg)) {
+        ?>
+        <div class="alert alert-danger centrarAlert" role="alert">
+            <?php
+            echo "$msg";
+            ?>
+        </div>
+        <?php
+    }else{
+        function url_actual(){
+            if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                $url = "https://";
+            }else{
+                $url = "http://";
+            }
+            return $url.$_SERVER['HTTP_HOST'];
+        }
+
+
+
+
+        //correo
+        $to=$email;
+        $asunto = "Consulta de $nombre";//modificar asunto
+        $headers = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		$headers .= 'From: <support@peluqueriaunisexlagallega.com>' . "\r\n";
+		$headers .= 'Cc: support@peluqueriaunisexlagallega.com' . "\r\n";
+        $contenido = "<section>
+                <p>Sr./Sra. <strong>$nombre</strong>,</p>
+                <p>Esta es su consulta:</p>
+                <p><strong>$mensaje</strong></p>
+                <p>Gracias por contactar con nosotros. En breve recibirá una respuesta a su consulta.</p>
+                <img src='".url_actual()."/img/logo.png' alt='LOGO' width='20%'>
+            </section>";
+		//$contenido='<table width="100%" border="1" cellspacing="1" cellpadding="2">
+		//	    <tr><td colspan="2">Someone Contacted You On Your Website</td></tr>
+		//	    <tr><td>Subject</td><td>'.$email.'</td></tr>
+		//	    <tr><td>Message</td><td>'.$mensaje.'</td></tr>
+		//	    <tr><td colspan="2"><img src="https://a1websitepro.com/wp-content/uploads/2014/09/logo200.png" width="300px"/></td></tr>
+		//	</table>';
+		mail($to,$asunto,$contenido,$headers);
+
+
+
+        //enviar correo
+        //correo enviado corectamente
+        ?><!--
+        <div class="alert alert-success centrarAlert" role="alert">
+            <?php
+            //echo "Datos del usuario modificados. Algunos de ellos serán visibles cuando realices la siguiente acción";
+            ?>
+        </div>
+        <?php
+        //el correo no se ha podido eniar
+        ?>
+        <div class="alert alert-danger centrarAlert" role="alert">
+            <?php
+            //echo "Imposible modificar usuario, el email o el nombre de usuario esta siendo utilizado.";
+            ?>
+        </div>-->
+        <?php
+
+
+
+
+
+
+    }
+}
+?>
 <h1>Contacto:</h1>
 <section>
     <article id='verde'>
-        <p>Nombre: <input type="text" name="" id=""></p>
-        <p>E-mail: <input type="email" name="" id=""></p>
-        <p>Explique el motivo de la consulta:</p>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
-        <input type="submit" value="Enviar">
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto" method="POST">
+            <p>Nombre: <input type="text" name="nombreCompleto" value="<?php echo $nombre.' '.$apellidos ?>"></p>
+            <p>E-mail: <input type="email" name="email" value="<?php echo $email ?>"></p>
+            <p>Explique el motivo de la consulta:</p>
+            <textarea name="mensaje" cols="30" rows="10"><?php echo $mensaje ?></textarea>
+            <input type="submit" name="enviar" value="Enviar">
+        </form>
     </article>
     <article id="misDatos">
         <p>mi email</p>

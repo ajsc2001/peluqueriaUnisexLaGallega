@@ -5,7 +5,7 @@ Class Servicio{
 	private $nombre;
 	private $tiempo;
     //poner usuario de visitante como base
-    function __construct($tipo_usr="root",$id="",$nombre="",$tiempo=""){
+    function __construct($tipo_usr="Cliente",$id="",$nombre="",$tiempo=""){
 		$this->tipo_usr = $tipo_usr;
 		$this->id = $id;
 		$this->nombre = $nombre;
@@ -54,6 +54,15 @@ Class Servicio{
         $sql = "INSERT INTO servicios (nombre, tiempo) VALUES ('$this->nombre', '$this->tiempo')";
 	    $conexion->query($sql);
 	    Conexion::desconectarBD($conexion);
+    }
+
+
+    
+    function eliminarServicio(){
+        $conexion = Conexion::conectarBD($this->tipo);
+        $sql = "DELETE FROM servicios WHERE id='$this->id'";
+        $conexion->query($sql);
+        Conexion::desconectarBD($conexion);
     }
 }
 ?>

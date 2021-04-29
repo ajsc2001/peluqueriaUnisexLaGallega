@@ -90,6 +90,13 @@ article img{
     margin-top:0;
     margin-bottom:0.5rem;
 }
+/*intento de adaptar todos los form*/
+/*#verde form{
+    width:80%;
+}
+#verde form input:not(input[type="submit"]){
+    width:50%;
+}*/
 form{
     min-width:40%;
     display:flex;
@@ -161,7 +168,7 @@ footer{
 }
 table{
     text-align: center;
-    max-width:95%;
+    /*max-width:95%;*/
 }
 
 

@@ -2,7 +2,12 @@
 	Class Conexion{
 		public static function conectarBD($tipoUsr){
 			$server = "localhost";
-			$usr = $tipoUsr;
+			//hosting
+			/*$usr = "lagallega_".$tipoUsr;
+			$pass = "Ccg_28112004";
+			$bd = "lagallega_peluqueria";*/
+			//local
+			$usr = "root";
 			$pass = "";
 			$bd = "peluqueria";
 			$mysqli = new mysqli($server, $usr, $pass, $bd);
