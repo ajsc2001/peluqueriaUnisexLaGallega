@@ -16,7 +16,7 @@ function validarDatos($datos){
     return $msg;
 }
 function eliminarUsuario(){
-    $usuario = new Usuario($_SESSION['id'],$_SESSION['tipo'],"","","","","","","");
+    $usuario = new Usuario($_SESSION['id'],$_SESSION['tipo']);
     $usuario->eliminarUsuario();
     session_unset();
 }
@@ -33,7 +33,7 @@ if(isset($_REQUEST["condicion"])){
     }
 }else{
     //coger datos usuario
-    $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo'],"","","","","","","");
+    $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo']);
     $usuario->recuperarDatos();
     $nombre = $usuario->get_nombre();
     $apellidos = $usuario->get_apellidos();
@@ -64,7 +64,7 @@ if(isset($_REQUEST["condicion"])){
 	    }else{
 		    if (isset($_POST['nick'])) {//si existe uno de los parametros que hay entonces creo user
                 //revisar como hacer lo de usuario, crear sets o hacer otra  variable de usuario
-			    $usuario = new Usuario($_SESSION["id"],$_SESSION["tipo"],$nombre,$apellidos,$edad,$email,$telefono,$nick,$contraseña);
+			    $usuario = new Usuario($_SESSION["id"],$_SESSION["tipo"],$nick,$contraseña,$email,$telefono,$nombre,$apellidos,$edad);
 			    if ($usuario->modificarUsuario()) {
                     //crear sesion del objeto
 				    $_SESSION["id"] = $usuario->get_id();
@@ -72,17 +72,13 @@ if(isset($_REQUEST["condicion"])){
 				    $_SESSION["nombre"] = $usuario->get_nombre();
 				    ?>
 				    <div class="alert alert-success centrarAlert" role="alert">
-					    <?php
-					    echo "Datos del usuario modificados. Algunos de ellos serán visibles cuando realices la siguiente acción";
-					    ?>
+                        Datos del usuario modificados. Algunos de ellos serán visibles cuando realices la siguiente acción
 				    </div>
 				    <?php
 			    }else{
 				    ?>
 				    <div class="alert alert-danger centrarAlert" role="alert">
-					    <?php
-					    echo "Imposible modificar usuario, el email o el nombre de usuario esta siendo utilizado.";
-					    ?>
+                        Imposible modificar usuario, el email o el nombre de usuario esta siendo utilizado.
 				    </div>
 				    <?php
 			    }
@@ -128,12 +124,6 @@ if (!isset($_POST['modificando'])&&(!isset($msg)||empty($msg))) {
 <?php   
 }
 ?>
-
-
-
-
-
-
     <!--Eliminar cuanta desde la función de eliminar cuenta y redirigir a la home-->
     <a id="eliminarUsuario" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Eliminar cuenta</a>
 </section>

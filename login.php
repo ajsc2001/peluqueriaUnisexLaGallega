@@ -12,7 +12,7 @@ require "class/usuario.php";
 		$nick = htmlspecialchars(trim($_POST['nick']));
 		$contraseña = htmlspecialchars(trim($_POST['contraseña']));
 		if (validarDatos($_POST)) {
-			$usuario = new Usuario("",$_SESSION["tipo"],"","","","","",$nick,$contraseña);
+			$usuario = new Usuario("",$_SESSION["tipo"],$nick,$contraseña);
 			if ($usuario->existe()) {
                 $usuario->login();
                 //crear sesion del objeto
@@ -23,18 +23,14 @@ require "class/usuario.php";
 			}else{
                 ?>
 				<div class="alert alert-danger centrarAlert" role="alert">
-					<?php
-					echo "LOGIN INCORRECTO";
-					?>
+					LOGIN INCORRECTO
 				</div>
 				<?php
             }
 		}else{
             ?>
 			<div class="alert alert-danger centrarAlert" role="alert">
-				<?php
-				echo "LOGIN INCORRECTO";
-				?>
+				No puede dejar ningún campo sin rellenar.
 			</div>
 			<?php
 		}

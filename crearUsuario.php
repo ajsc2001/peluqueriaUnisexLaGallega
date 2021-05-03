@@ -44,7 +44,7 @@ require "class/usuario.php";
 		<?php
 	}else{
 		if (isset($_POST['nick'])) {//si existe uno de los parametros que hay entonces creo user
-			$usuario = new Usuario("",$_SESSION["tipo"],$nombre,$apellidos,$edad,$email,$telefono,$nick,$contraseña);
+			$usuario = new Usuario("",$_SESSION["tipo"],$nick,$contraseña,$email,$telefono,$nombre,$apellidos,$edad);
 			if ($usuario->crearUsuario()) {
 				?>
 				<div class="alert alert-success centrarAlert" role="alert">
@@ -56,9 +56,7 @@ require "class/usuario.php";
 			}else{
 				?>
 				<div class="alert alert-danger centrarAlert" role="alert">
-					<?php
-					echo "Imposible crear usuario, el email o el nombre de usuario esta siendo utilizado.";
-					?>
+					Imposible crear usuario, el email o el nombre de usuario esta siendo utilizado.
 				</div>
 				<?php
 			}

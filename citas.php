@@ -1,3 +1,6 @@
+<?php
+require "class/servicio.php";
+?>
 <section>
     <article>
     <article>
@@ -7,12 +10,27 @@
     <article id='verde'>
         <h1>Pedir cita</h1>
         <h2>Motivo/s:</h2>
-        <form method="" action="">
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=citas" method="POST">
             <div id="motivos">
-                <label><input type="checkbox" name="" id=""><span>Tintar</span></label>
-                <label><input type="checkbox" name="" id=""><span>Tintar</span></label>
-                <label><input type="checkbox" name="" id=""><span>Tintar</span></label>
-                <label><input type="checkbox" name="" id=""><span>Tintar</span></label>
+                <?php
+                $servicio = new Servicio($_SESSION['tipo']);
+                if (!$servicio->obtenerServicios()) {
+                    if (isset($_POST['servicios'])) {
+                        ?>
+                        <div class="alert alert-warning centrarAlert" role="alert">
+                            No hay ningún servicio disponible. Pongase en <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">contacto</a> con nosotros.
+                        </div>
+                        <?php
+                        }
+                    }else{
+                        $servicios = $servicio->obtenerServicios();
+                        foreach($servicios as $servicio){
+                            ?>
+                            <label><input type="checkbox" name="<?php echo $servicio['nombre'] ?>" value="<?php echo substr($servicio['tiempo'], 0, -3) ?>"><span><?php echo $servicio['nombre'] ?></span></label>
+                            <?php
+                        }
+                    }
+                ?>
             </div>
             <select name="" id="" disabled="disabled">
                 <option value="">hora1</option>

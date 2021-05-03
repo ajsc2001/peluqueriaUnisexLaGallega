@@ -145,6 +145,9 @@ input{
 input[type="submit"]{
     margin-top:1rem;
 }
+textarea{
+    padding:0.5rem;
+}
 #misDatos{
     display:flex;
     flex-direction:column;

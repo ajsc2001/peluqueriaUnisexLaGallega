@@ -16,7 +16,7 @@ $apellidos = "";//solo se usa para cargarlo automaticamente
 $email = "";
 $mensaje = "";
 if (isset($_SESSION['id'])) {
-    $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo'],"","","","","","","");
+    $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo']);
     $usuario->recuperarDatos();
     $nombre = $usuario->get_nombre();
     $apellidos = $usuario->get_apellidos();
@@ -44,57 +44,37 @@ if (isset($_POST['enviar'])) {
             }
             return $url.$_SERVER['HTTP_HOST'];
         }
-
-
-
-
         //correo
         $to=$email;
         $asunto = "Consulta de $nombre";//modificar asunto
         $headers = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-		$headers .= 'From: <support@peluqueriaunisexlagallega.com>' . "\r\n";
-		$headers .= 'Cc: support@peluqueriaunisexlagallega.com' . "\r\n";
-        $contenido = "<section>
+		$headers .= "From: Peluquería Unisex 'La Gallega'<support@peluqueriaunisexlagallega.com>" . "\r\n";
+		$headers .= "Cc: support@peluqueriaunisexlagallega.com" . "\r\n";
+        $contenido = "
+            <section>
                 <p>Sr./Sra. <strong>$nombre</strong>,</p>
                 <p>Esta es su consulta:</p>
                 <p><strong>$mensaje</strong></p>
                 <p>Gracias por contactar con nosotros. En breve recibirá una respuesta a su consulta.</p>
-                <img src='".url_actual()."/img/logo.png' alt='LOGO' width='20%'>
+                <img src='".url_actual()."/img/logo.png' alt='LOGO' width='10%'>
             </section>";
-		//$contenido='<table width="100%" border="1" cellspacing="1" cellpadding="2">
-		//	    <tr><td colspan="2">Someone Contacted You On Your Website</td></tr>
-		//	    <tr><td>Subject</td><td>'.$email.'</td></tr>
-		//	    <tr><td>Message</td><td>'.$mensaje.'</td></tr>
-		//	    <tr><td colspan="2"><img src="https://a1websitepro.com/wp-content/uploads/2014/09/logo200.png" width="300px"/></td></tr>
-		//	</table>';
-		mail($to,$asunto,$contenido,$headers);
-
-
-
         //enviar correo
-        //correo enviado corectamente
-        ?><!--
-        <div class="alert alert-success centrarAlert" role="alert">
-            <?php
-            //echo "Datos del usuario modificados. Algunos de ellos serán visibles cuando realices la siguiente acción";
+        if (mail($to,$asunto,$contenido,$headers)) {
+            //correo enviado corectamente
             ?>
-        </div>
+            <div class="alert alert-success centrarAlert" role="alert">
+                El correo ha sido enviado correctamente. Si usted no recibe una copia en los proximos 5 minutos vuelva a escribirnos o pongase en contacto con nosotros por otra via.
+            </div>
         <?php
-        //el correo no se ha podido eniar
+        }else{
+            //el correo no se ha podido enviar
         ?>
         <div class="alert alert-danger centrarAlert" role="alert">
-            <?php
-            //echo "Imposible modificar usuario, el email o el nombre de usuario esta siendo utilizado.";
-            ?>
-        </div>-->
+            El correo no ha sido enviado. Ha ocurrido un error. Vuelva a intentarlo o pongase en contacto con nosotros por otra via.
+        </div>
         <?php
-
-
-
-
-
-
+        }
     }
 }
 ?>

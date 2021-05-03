@@ -3,15 +3,15 @@ require "lib/codificacion.php";
 	Class Usuario{
 		private $id;
 		private $tipo;
+		private $nick;
+		private $contraseña;
+		private $email;
+		private $telefono;
 		private $nombre;
 		private $apellidos;
 		private $edad;
-		private $email;
-		private $telefono;
-		private $nick;
-		private $contraseña;
 		//cambiar tipo usuario por defecto a visitante
-		function __construct($id="",$tipo="Cliente",$nombre="",$apellidos="",$edad="",$email="",$telefono="",$nick="",$contraseña=""){
+		function __construct($id="",$tipo="Cliente",$nick="",$contraseña="",$email="",$telefono="",$nombre="",$apellidos="",$edad=""){
 			$this->id = $id;
 			$this->tipo = $tipo;
 			$this->nombre = $nombre;
@@ -108,6 +108,21 @@ require "lib/codificacion.php";
 			Conexion::desconectarBD($conexion);
 			return $usuarios;
 		}
+		function obtenerUsuariosPaginacion($inicio,$cuantos){
+			$usuarios = array();
+			$conexion = Conexion::conectarBD($this->tipo);
+			$sql = "SELECT * FROM usuarios LIMIT $inicio,$cuantos";
+			$result = $conexion->query($sql);
+			if (!$result->num_rows<1) {
+				while ($fila = $result->fetch_assoc()) {
+					//los añado al objeto
+					array_push($usuarios,$fila);
+				};
+			}
+			$result->free();//no se si hay que ponerlo
+			Conexion::desconectarBD($conexion);
+			return $usuarios;
+		}
 		function login(){
 			$conexion = Conexion::conectarBD($this->tipo);
 			$sql = "SELECT * FROM usuarios WHERE nick='$this->nick'";
@@ -168,7 +183,12 @@ require "lib/codificacion.php";
 		}
 		function modificarDatos(){
 			$conexion = Conexion::conectarBD($this->tipo);
-			$sql = "UPDATE usuarios SET tipo='$this->tipo', nick='$this->nick',  contraseña='".encripta($this->contraseña,"encriptando")."', email='$this->email', telefono='$this->telefono', nombre='$this->nombre', apellidos='$this->apellidos', edad='$this->edad' WHERE id='".$_SESSION['id']."'";
+			if (empty($this->contraseña)) {
+				$sql = "UPDATE usuarios SET tipo='$this->tipo', nick='$this->nick', email='$this->email', telefono='$this->telefono', nombre='$this->nombre', apellidos='$this->apellidos', edad='$this->edad' WHERE id='$this->id'";
+			}else{
+				$sql = "UPDATE usuarios SET tipo='$this->tipo', nick='$this->nick',  contraseña='".encripta($this->contraseña,"encriptando")."', email='$this->email', telefono='$this->telefono', nombre='$this->nombre', apellidos='$this->apellidos', edad='$this->edad' WHERE id='$this->id'";
+			
+			}
 			$conexion->query($sql);
 			Conexion::desconectarBD($conexion);
 		}

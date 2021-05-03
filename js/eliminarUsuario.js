@@ -17,9 +17,5 @@ $(function() {
         }else{
             alert("El usuario {nick} no ha podido ser eliminado");
         }
-
-
-
-        
     });
 });

@@ -1,8 +1,8 @@
 <?php
-if (isset($_POST['usuarios'])||isset($_POST['añadirYModificarUsuarios'])) {
+if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['inicioUsuarios'])) {
     require "class/usuario.php";
 }
-if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
+if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||isset($_GET['inicioServicios'])) {
     require "class/servicio.php";
 
 
@@ -53,24 +53,105 @@ if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
 
 
 <?php
-if (isset($_POST['usuarios'])) {
+if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['inicioUsuarios'])) {
+    $usuario = new Usuario("",$_SESSION['tipo']);
+    if ($usuario->obtenerUsuarios()) {
+        $usuarios = $usuario->obtenerUsuarios();
+    }
+    if (isset($_POST['modificarUsuarios'])) {
+        function validarDatos($datos){
+            foreach($datos as $key => $value){
+                if (substr($key,0,11)!="contraseña"&&empty($value)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
+        ////////////////////////////////////////
+        ////////////////////////////////////////
+        //hacer trim y specialcharts
+        ////////////////////////////////////////
+        ////////////////////////////////////////
+
+
+        $datos_usr = array_slice($_POST, 0, -1);
+        if (!validarDatos($_POST)) {
+            ?>
+            <div class="alert alert-danger centrarAlert" role="alert">
+                Para modificar los datos de los usuarioas solo puede dejar sin rellenar la contraseña en cuyo caso no será actualizada.
+            </div>
+            <?php
+        }else{
+            $msg = "Los datos de los usuarios han sido modificados";
+            $err = false;
+            for ($i=0; $i < count($usuarios); $i++) {
+                $usuario = new Usuario($usuarios[$i]['id'],array_shift($datos_usr),array_shift($datos_usr),array_shift($datos_usr),array_shift($datos_usr),array_shift($datos_usr),array_shift($datos_usr),array_shift($datos_usr),array_shift($datos_usr));
+                if (!$usuario->modificarUsuario()) {
+                    $err = true;
+                    $msg .= " pero alguna/s de las modificaciones que ha hecho no se han llevado a cabo por que algún usuario ya usaba o el email o el nick";
+                }
+            }
+            if ($err) {
+                ?>
+                <div class="alert alert-warning centrarAlert" role="alert">
+                    <?php echo $msg ?>.
+                </div>
+                <?php
+            }else{
+                ?>
+                <div class="alert alert-success centrarAlert" role="alert">
+                    <?php echo $msg ?>.
+                </div>
+                <?php
+            }
+
+
+        }
+    }
+        
+
+
+
+
+
+
+
+
+    $total = count($usuarios);
+    if (isset($_GET['inicioUsuarios'])) {
+        $inicio = $_GET['inicioUsuarios'];
+    }else{
+        $inicio = 0;
+    }
+    $cuantos = 10;
+    $paginas = ceil($total/$cuantos);
+
+
+
+
+
+
+
     $tipos_usr = array(
         "Administrador",
         "Trabajador",
         "Cliente"
     );
     $usuario = new Usuario("",$_SESSION['tipo']);
-    if ($usuario->obtenerUsuarios()) {
-        $usuarios = $usuario->obtenerUsuarios();
+    if ($usuario->obtenerUsuariosPaginacion($inicio,$cuantos)) {
+        $usuarios = $usuario->obtenerUsuariosPaginacion($inicio,$cuantos);
     }
     ?>
-    <!--<div class="table-responsive">-->
-        <table class="table table-hover">
+    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion" method="POST">
+    <table class="table table-hover">
             <thead>
                 <tr>
                     <th class="text-danger" scope="col">USUARIOS</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Nick</th>
+                    <th scope="col">Contraseña</th>
                     <th scope="col">Email</th>
                     <th scope="col">Telefono</th>
                     <th scope="col">Nombre</th>
@@ -80,13 +161,13 @@ if (isset($_POST['usuarios'])) {
             </thead>
             <tbody>
             <?php
-            if ($usuario->obtenerUsuarios()) {/*Count usuarios*/
+            if (/*$usuario->obtenerUsuarios()*/count($usuarios)) {
                 foreach ($usuarios as $key => $value) {
                     ?>
                     <tr>
                     <?php
                     foreach ($value as $key2 => $value2){
-                        if ($key2!="contraseña") {
+                        if ($key2!="id") {
                             if ($key2=="tipo") {
                             ?>
                             <td>
@@ -94,7 +175,7 @@ if (isset($_POST['usuarios'])) {
                                 <?php
                                 foreach ($tipos_usr as $tipo){
                                     echo "<option value='$tipo'";
-                                    if ($tipo==substr($value2, 0, -3)) {
+                                    if ($tipo==$value2) {
                                         echo "selected='selected'";
                                     }
                                     echo ">$tipo</option>";
@@ -103,12 +184,24 @@ if (isset($_POST['usuarios'])) {
                                 </select>
                             </td>
                             <?php
+                            }else if($key2=="contraseña"){
+                                ?>
+                                <td><input type="password" name="<?php echo $key2.$value['id'] ?>" value=""></td>
+                                <?php
+                            }else if($key2=="edad"){
+                                ?>
+                                <td><input type="number" name="<?php echo $key2.$value['id'] ?>" value="<?php echo $value2 ?>"></td>
+                                <?php
                             }else{
                                 ?>
-                                <td><?php echo $value2 ?></td>
+                                <td><input type="text" name="<?php echo $key2.$value['id'] ?>" value="<?php echo $value2 ?>"></td>
                                 <?php
                             }
-                        } 
+                        }else{
+                            ?>
+                            <td><?php echo $value2 ?></td>
+                            <?php
+                        }
                     }
                     ?>
                     <!--añadir el form y el input hidden con el id-->
@@ -116,7 +209,7 @@ if (isset($_POST['usuarios'])) {
                         <td>
                         <!--ponerle un enlace a la papelera a ver si asi funciona...-->
                         <!--<a id="eliminarUsuario" href="<?php/* echo $_SERVER['PHP_SELF'] */?>?p=cuenta">Eliminar cuenta</a>-->
-                            <i id="<?php echo $value['id'] ?>" class="fas fa-trash-alt text-danger servicio"></i>
+                            <i id="<?php echo $value['id'] ?>" class="fas fa-trash-alt text-danger usuario"></i>
                         </td>
                     </tr>
                     <?php
@@ -125,10 +218,71 @@ if (isset($_POST['usuarios'])) {
             ?>
             </tbody>
         </table>
+
+
+
+
+        <?php
+        if ($paginas>0) {
+            ?>
+            <nav id="paginacion" aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item <?php if ($inicio==0) { echo "disabled"; } ?>">
+                        <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion&inicioUsuarios=<?php echo $inicio-$cuantos ?>" <?php if ($inicio==0) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Anteriores</a>
+                    </li>
+                    <?php
+                    for ($i=1; $i <= $paginas; $i++) {
+                        ?>
+                        <li class="page-item <?php if (ceil($inicio/$cuantos)+1==$i) { echo "active"; } ?>">
+                            <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion&inicioUsuarios=<?php echo $cuantos*($i-1) ?>"><?php echo $i ?></a>
+                        </li>
+                        <?php
+                    }
+                    ?>
+                    <li class="page-item <?php if ($inicio>=$total-$cuantos) { echo "disabled"; } ?>">
+                        <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion&inicioUsuarios=<?php echo $inicio+$cuantos ?>" <?php if ($inicio>=$total-$cuantos) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Siguientes</a>
+                    </li>
+                </ul>
+            </nav>
+            <?php
+        }
+        ?>
+
+
+        
+
+
+
+
+
+
+
+        <input type="submit" name="modificarUsuarios" value="Modificar usuarios">
+        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=crearUsuario">Crear usuario</a>
+    </form>
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!--<div class="table-responsive">-->
+        
     <!--</div>-->
     <?php
 }
 
+    
 
 
 
@@ -148,7 +302,8 @@ if (isset($_POST['usuarios'])) {
 
 
 
-if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
+
+if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||isset($_GET['inicioServicios'])) {
     $servicio = new Servicio($_SESSION['tipo']);
     if (!$servicio->obtenerServicios()) {
         if (isset($_POST['servicios'])) {
@@ -178,11 +333,17 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
                     $cont++;
                 }
             }
-            if ($cont!=0) {
-                return false;
-            }
-            return true;
+            return $cont;
         }
+
+
+        /////////////////////////////////////////
+        /////////////////////////////////////////
+        //htmlspecialcharts y trim de $_POST//
+        /////////////////////////////////////////
+        /////////////////////////////////////////
+
+
         $serviciosExistentes = array_slice($_POST, 0, -3);
         $serviciosNuevos = array_slice($_POST, -3, -1);
         if (!validarServiciosExistentes($serviciosExistentes)) {
@@ -193,7 +354,7 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
             <?php
         }else{
             $nuevos = validarServiciosNuevos($serviciosNuevos);
-            if (!$nuevos) {
+            if ($nuevos!=0&&$nuevos!=count($serviciosNuevos)) {
                 ?>
                 <div class="alert alert-danger centrarAlert" role="alert">
                     Si rellena un campo de la última fila tiene que rellenar el resto de campos. Revise todos los campos que haya modificado.
@@ -202,14 +363,20 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
             }else{
                 $msg = "";
                 if ($servicio->obtenerServicios()) {
+                    $msg .= "Los datos de servicios anteriores han sido actualizados";
                     //modifico los ya existentes
+                    $err = false;
                     for ($i=0; $i < count($servicios); $i++) { 
                         $servicio = new Servicio($_SESSION['tipo'],$servicios[$i]['id'],array_shift($serviciosExistentes),array_shift($serviciosExistentes));
-                        $servicio->modificarServicio();
+                        if (!$servicio->modificarServicio()) {
+                            $err = true;
+                        }
                     }
-                    $msg .= "Los datos de servicios anteriores han sido actualizados";
+                    if ($err) {
+                        $msg .= " pero algun/os servicios que ha modificado ya existian por lo que no han sido modificados";
+                    }
                 }
-                if ($nuevos) {
+                if ($nuevos==0) {
                     //creo el nuevo servicio
                     $servicio = new Servicio($_SESSION['tipo'],"",array_shift($serviciosNuevos),array_shift($serviciosNuevos));
                     if ($servicio->nuevoServicio()) {
@@ -218,13 +385,23 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
                         }else{
                             $msg .= "Se ha añadido un nuevo servicio.";
                         }
-				        ?>
-			            <div class="alert alert-success centrarAlert" role="alert">
-				            <?php
-                            echo $msg;
+                        if ($err) {
                             ?>
-                        </div>
-                        <?php
+                            <div class="alert alert-warning centrarAlert" role="alert">
+                                <?php
+                                echo $msg;
+                                ?>
+                            </div>
+                            <?php
+                        }else{
+                            ?>
+                            <div class="alert alert-success centrarAlert" role="alert">
+                                <?php
+                                echo $msg;
+                                ?>
+                            </div>
+                            <?php
+                        }
                     }else{
                         if (strlen($msg)) {
                             $msg .= " pero el nuevo servicio no se ha añadido porque ya que existia.";
@@ -239,10 +416,57 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
                         </div>
                         <?php
                     }  
+                }else{
+                    if ($err) {
+                        ?>
+                        <div class="alert alert-warning centrarAlert" role="alert">
+				            <?php
+                            echo $msg;
+                            ?>
+                        </div>
+                        <?php
+                    }else{
+                        ?>
+                        <div class="alert alert-success centrarAlert" role="alert">
+				            <?php
+                            echo $msg;
+                            ?>
+                        </div>
+                        <?php
+                    }
                 }
             }
         }
     }
+
+
+
+
+
+
+
+
+    
+    $total = count($servicios);
+    if (isset($_GET['inicioServicios'])) {
+        $inicio = $_GET['inicioServicios'];
+    }else{
+        $inicio = 0;
+    }
+    $cuantos = 10;
+    $paginas = ceil($total/$cuantos);
+
+
+
+
+
+
+
+
+
+
+
+
     $horas = array(
         "00:15",
         "00:30",
@@ -261,8 +485,8 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
         "03:45",
         "04:00"
     );
-    if ($servicio->obtenerServicios()) {
-        $servicios = $servicio->obtenerServicios();
+    if ($servicio->obtenerServiciosPaginacion($inicio,$cuantos)) {
+        $servicios = $servicio->obtenerServiciosPaginacion($inicio,$cuantos);
     }
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion" method="POST">
@@ -276,7 +500,7 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
             </thead>
             <tbody>
             <?php
-            if ($servicio->obtenerServicios()) {
+            if (/*$servicio->obtenerServicios()*/count($servicios)) {
                 foreach ($servicios as $key => $value) {
                     ?>
                     <tr>
@@ -339,6 +563,40 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])) {
                 </tr>
             </tbody>
         </table>
+
+
+
+
+
+        <?php
+        if ($paginas>0) {
+            ?>
+            <nav id="paginacion" aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item <?php if ($inicio==0) { echo "disabled"; } ?>">
+                        <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion&inicioServicios=<?php echo $inicio-$cuantos ?>" <?php if ($inicio==0) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Anteriores</a>
+                    </li>
+                    <?php
+                    for ($i=1; $i <= $paginas; $i++) {
+                        ?>
+                        <li class="page-item <?php if (ceil($inicio/$cuantos)+1==$i) { echo "active"; } ?>">
+                            <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion&inicioServicios=<?php echo $cuantos*($i-1) ?>"><?php echo $i ?></a>
+                        </li>
+                        <?php
+                    }
+                    ?>
+                    <li class="page-item <?php if ($inicio>=$total-$cuantos) { echo "disabled"; } ?>">
+                        <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion&inicioServicios=<?php echo $inicio+$cuantos ?>" <?php if ($inicio>=$total-$cuantos) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Siguientes</a>
+                    </li>
+                </ul>
+            </nav>
+            <?php
+        }
+        ?>
+
+
+
+
         <input type="submit" name="añadirYModificarServicios" value="Añadir / Modificar servicios">
     </form>
     <?php
