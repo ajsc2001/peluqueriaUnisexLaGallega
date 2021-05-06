@@ -43,7 +43,7 @@ Class Servicio{
     }
     function modificarServicio(){
         $conexion = Conexion::conectarBD($this->tipo_usr);
-        $sql = "SELECT * FROM servicios WHERE nombre='$this->nombre' AND tiempo='$this->tiempo'";
+        $sql = "SELECT * FROM servicios WHERE nombre='$this->nombre'";
         if ($result = $conexion->query($sql)) {
             if ($result->num_rows<1) {
                 $this->modificarDatos();
@@ -70,7 +70,7 @@ Class Servicio{
     }
     function nuevoServicio(){
         $conexion = Conexion::conectarBD($this->tipo_usr);
-        $sql = "SELECT * FROM servicios WHERE nombre='$this->nombre' AND tiempo='$this->tiempo'";
+        $sql = "SELECT * FROM servicios WHERE nombre='$this->nombre'";
         if ($result = $conexion->query($sql)) {
             if ($result->num_rows<1) {
                 $this->añadirServicio();
@@ -88,9 +88,6 @@ Class Servicio{
 	    $conexion->query($sql);
 	    Conexion::desconectarBD($conexion);
     }
-
-
-    
     function eliminarServicio(){
         $conexion = Conexion::conectarBD($this->tipo);
         $sql = "DELETE FROM servicios WHERE id='$this->id'";

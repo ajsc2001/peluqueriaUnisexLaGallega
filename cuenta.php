@@ -16,7 +16,7 @@ function validarDatos($datos){
     return $msg;
 }
 function eliminarUsuario(){
-    $usuario = new Usuario($_SESSION['id'],$_SESSION['tipo']);
+    $usuario = new Usuario(/*$_SESSION['id']*/"",$_SESSION['tipo']);
     $usuario->eliminarUsuario();
     session_unset();
 }
@@ -89,24 +89,6 @@ if(isset($_REQUEST["condicion"])){
 ?>
 <h1>Mis datos:</h1>
 <section id="cuenta">
-<?php
-if (!isset($_POST['modificando'])&&(!isset($msg)||empty($msg))) {
-?>
-    <article>
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta" method="POST">
-            <p><strong>Tipo de usuario:</strong> <span><?php echo $_SESSION["tipo"] ?></span></p>
-            <p><strong>Nombre:</strong> <span><?php echo $nombre ?></span></p>
-            <p><strong>Apellidos:</strong> <span><?php echo $apellidos ?></span></p>
-            <p><strong>Edad:</strong> <span><?php echo $edad ?></span></p>
-            <p><strong>E-mail:</strong> <span><?php echo $email ?></span></p>
-            <p><strong>Teléfono:</strong> <span><?php echo $telefono ?></span></p>
-            <p><strong>Nombre de usuario:</strong> <span><?php echo $nick ?></span></p>
-            <input type="submit" name="modificando" value="Modificar datos">
-        </form>
-    </article>
-<?php
-}else{
-?>
     <article id="verde">
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta" method="POST">
             <p>Nombre: <input type="text" name="nombre" value="<?php echo $nombre ?>"></p>
@@ -120,10 +102,6 @@ if (!isset($_POST['modificando'])&&(!isset($msg)||empty($msg))) {
             <input type="submit" name="modificar" value="Modificar datos">
         </form>
     </article>
-    
-<?php   
-}
-?>
     <!--Eliminar cuanta desde la función de eliminar cuenta y redirigir a la home-->
     <a id="eliminarUsuario" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Eliminar cuenta</a>
 </section>

@@ -173,7 +173,16 @@ table{
     text-align: center;
     /*max-width:95%;*/
 }
-
+#fecha{
+    text-align:center;
+    font-weight:bold;
+    font-size:1.5rem;
+}
+#cerrado{
+    text-align:center;
+    font-weight:bold;
+    font-size:3rem;
+}
 
 
 

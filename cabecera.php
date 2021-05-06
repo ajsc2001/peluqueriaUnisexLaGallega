@@ -10,7 +10,7 @@
     <!--Bootstrap 5.0.0-->
     <link rel="stylesheet" href="recursos/bootstrap5/css/bootstrap.min.css">
     <script src="recursos/bootstrap5/js/bootstrap.bundle.min.js"></script>
-    <!--FontAwesome-->
+    <!--FontAwesome 5.15.3-->
     <link rel="stylesheet" href="recursos/fontawesome-5.15.3/css/all.min.css">
     <!--jQuery 3.6.0-->
     <script src="recursos/jquery-3.6.0.min.js"></script>
@@ -21,6 +21,7 @@ if (isset($_GET['p'])&&($_GET['p']=="horario"||$_GET['p']=="citas")) {
     <!--jQuery UI 1.12.1-->
     <link rel="stylesheet" href="recursos/jquery-ui-1.12.1/jquery-ui.min.css">
     <script src="recursos/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <!--Mis archivos-->
     <script src="js/calendario.js"></script>
     <?php
 }
@@ -35,7 +36,6 @@ if (isset($_GET['p'])&&$_GET['p']=="administracion") {
     <?php
 }
 ?>
-    <!--Mis archivos-->
     <link rel="stylesheet" href="styles.css">
 </head>
 

@@ -194,7 +194,11 @@ require "lib/codificacion.php";
 		}
 		function eliminarUsuario(){
 			$conexion = Conexion::conectarBD($this->tipo);
-			$sql = "DELETE FROM usuarios WHERE id='".$_SESSION['id']."'";
+			if ($this->id!="") {
+				$sql = "DELETE FROM usuarios WHERE id='$this->id'";
+			}else{
+				$sql = "DELETE FROM usuarios WHERE id='".$_SESSION['id']."'";
+			}
 			$conexion->query($sql);
 			Conexion::desconectarBD($conexion);
 		}

@@ -118,15 +118,14 @@ Class Horario{
         $conexion = Conexion::conectarBD($this->tipo_usr);
         $sql = "SELECT * FROM horario WHERE dia='$dia'";
         if ($result = $conexion->query($sql)) {
-            if ($result->num_rows<1) {
-                $dia = $result->fetch_assoc();
+            if ($result->num_rows>0) {
+                return $result->fetch_assoc();
             }else{
                 return false;
             }
         }
 		$result->free();
 		Conexion::desconectarBD($conexion);
-        return $dia;
     }
 }
 ?>

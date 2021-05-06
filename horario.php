@@ -14,20 +14,8 @@ function datosDia($diaSemana){
         <h1>Horario</h1>
         <div id='horario'>
             <?php
-            if(isset($_REQUEST["condicion"])){
-                if($_REQUEST["condicion"] == "datosDia" ){
-                    echo datosDia($_GET['d']);
-                    // salimos de la pagina php y devolvemos la respuesta
-                    exit();
-                }else{
-                    echo "otra funcion o respuesta";
-                    // salimos de la pagina php y devolvemos la respuesta
-                    exit();
-                }
-            }
             if (isset($_GET['d'])) {
-                $dia = datosDia($_GET['d']);
-                print_r($dia);
+                $dia = $_GET['d'];
             }else{
                 $dia = date("l");
                 switch ($dia) {
@@ -53,20 +41,28 @@ function datosDia($diaSemana){
                         $dia = "Sábado";
                         break;
                 }
-                echo$dia;
-                $dia = datosDia($dia);
-                echo$dia;
-                print_r($dia);
+            }
+            $dia = datosDia($dia);
+            if ($dia) {
+                echo "<p id='fecha'>".$dia['dia']."</p>";
+                if ($dia['cerrado']) {
+                    echo "<p id='cerrado'>CERRADO</p>";
+                }else{
+                    ?>
+                    <p>Mañana:</p>
+                    <p><?php echo substr($dia['aperturaMañana'],0,-3)." - ".substr($dia['cierreMañana'],0,-3) ?></p>
+                    <p>Tarde:</p>
+                    <p><?php echo substr($dia['aperturaTarde'],0,-3)." - ".substr($dia['cierreTarde'],0,-3) ?></p>
+                    <?php 
+                }
+            }else{
+                ?>
+                <div class="alert alert-info centrarAlert" role="alert">
+                    No hay ningún horario para el dia seleccionado. Pongase en <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">contacto</a> con nostros para más información
+                </div>
+                <?php
             }
             ?>
-
-
-
-
-            <p>Mañana:</p>
-            <p>10:00 - 14:00</p>
-            <p>Tarde:</p>
-            <p>16:00 - 20:00</p>
         </div>
     </article>
 </section>

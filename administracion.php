@@ -1,36 +1,57 @@
 <?php
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////AJAX////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//eliminar un usuario
+function eliminarUsuario($id){
+    $usuario = new Usuario($id,$_SESSION['tipo']);
+    $usuario->eliminarUsuario();
+}
+if(isset($_REQUEST["usuario"])){
+    require "class/usuario.php";
+    echo eliminarUsuario($_REQUEST["usuario"]);
+    //echo array_push($_POST,"usuarios"=>"");
+    exit();
+}
+//eliminar un servicio
+function eliminarServicio($id){
+    $servicio = new Servicio($_SESSION['tipo'],$id);
+    $servicio->eliminarServicio();
+}
+if(isset($_REQUEST["servicio"])){
+    require "class/servicio.php";
+    echo eliminarServicio($_REQUEST["servicio"]);
+    //echo array_push($_POST,"servicios"=>"");
+    exit();
+}
+//eliminar la página actual en la que esto (paginación)
+function eliminarPaginaActual(){
+    if (isset($_SESSION['paginaActual'])) {
+        unset($_SESSION['paginaActual']);
+    }
+}
+if (isset($_REQUEST['condicion'])&&$_REQUEST['condicion']=="eliminarPaginaActual") {
+    //elimino la sesion de la pagina actual
+    echo eliminarPaginaActual();
+}
+//paginacion
+$cuantos = 10;
+if(isset($_REQUEST["paginaActual"])){
+    echo $_SESSION['paginaActual'] = $_REQUEST['paginaActual'];
+    exit();
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////Botones/////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['inicioUsuarios'])) {
     require "class/usuario.php";
 }
 if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||isset($_GET['inicioServicios'])) {
     require "class/servicio.php";
-
-
-
-
-    function eliminarServicio(){
-        $servicio = new Servicio($_SESSION['tipo'],$_REQUEST['id']);
-        $servicio->eliminarServicio();
-        //////////////
-        /*$usuario = new Usuario($_SESSION['id'],$_SESSION['tipo'],"","","","","","","");
-        $usuario->eliminarUsuario();
-        session_unset();*/
-    }
-    if(isset($_REQUEST["condicion"])){
-        // si llega la condicion, y es igual a la condicion que necesitas para entrar ejecuta la función y devuelve el resultado        
-        if($_REQUEST["condicion"] == "eliminar" ){
-           echo eliminarServicio();
-           // salimos de la pagina php y devolvemos la respuesta
-           exit();
-        }else{
-           echo "otra funcion o respuesta";
-           // salimos de la pagina php y devolvemos la respuesta
-           exit();
-        }
-    }
-
-
-
 }
 if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
     require "class/horario.php";
@@ -47,16 +68,26 @@ if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
     </article>
 </section>
 <section id="modificaciones">
-
-
-
-
-
 <?php
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////Tabla usuarios////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['inicioUsuarios'])) {
     $usuario = new Usuario("",$_SESSION['tipo']);
-    if ($usuario->obtenerUsuarios()) {
-        $usuarios = $usuario->obtenerUsuarios();
+    //paginación
+    $total = count($usuario->obtenerUsuarios());
+    $paginas = ceil($total/$cuantos);
+    if (isset($_SESSION['paginaActual'])) {
+        $inicio = $_SESSION['paginaActual'] * $cuantos - $cuantos;
+    }else{
+        if (isset($_GET['inicioUsuarios'])) {
+            $inicio = $_GET['inicioUsuarios'];
+        }else{
+            $inicio = 0;
+        }
+    }
+    if ($usuario->obtenerUsuariosPaginacion($inicio,$cuantos)) {
+        $usuarios = $usuario->obtenerUsuariosPaginacion($inicio,$cuantos);
     }
     if (isset($_POST['modificarUsuarios'])) {
         function validarDatos($datos){
@@ -67,15 +98,11 @@ if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['
             }
             return true;
         }
-
-
-        ////////////////////////////////////////
-        ////////////////////////////////////////
-        //hacer trim y specialcharts
-        ////////////////////////////////////////
-        ////////////////////////////////////////
-
-
+        //htmlspecialcharts y trim de $_POST
+        foreach($_POST as $key => $value){
+            $_POST[$key] = htmlspecialchars(trim($value));
+        }
+        //me quedo el array sin el dato del boton
         $datos_usr = array_slice($_POST, 0, -1);
         if (!validarDatos($_POST)) {
             ?>
@@ -106,34 +133,9 @@ if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['
                 </div>
                 <?php
             }
-
-
         }
     }
-        
-
-
-
-
-
-
-
-
-    $total = count($usuarios);
-    if (isset($_GET['inicioUsuarios'])) {
-        $inicio = $_GET['inicioUsuarios'];
-    }else{
-        $inicio = 0;
-    }
-    $cuantos = 10;
-    $paginas = ceil($total/$cuantos);
-
-
-
-
-
-
-
+    //datos
     $tipos_usr = array(
         "Administrador",
         "Trabajador",
@@ -204,12 +206,8 @@ if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['
                         }
                     }
                     ?>
-                    <!--añadir el form y el input hidden con el id-->
-                    <!--como se va a hacer por ajax, solomente hará falta añadirle un id al elemento i, para despues desde js cogerlo-->
                         <td>
-                        <!--ponerle un enlace a la papelera a ver si asi funciona...-->
-                        <!--<a id="eliminarUsuario" href="<?php/* echo $_SERVER['PHP_SELF'] */?>?p=cuenta">Eliminar cuenta</a>-->
-                            <i id="<?php echo $value['id'] ?>" class="fas fa-trash-alt text-danger usuario"></i>
+                            <i class="fas fa-trash-alt text-danger usuario"></i>
                         </td>
                     </tr>
                     <?php
@@ -218,11 +216,8 @@ if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['
             ?>
             </tbody>
         </table>
-
-
-
-
         <?php
+        //paginación
         if ($paginas>0) {
             ?>
             <nav id="paginacion" aria-label="...">
@@ -247,65 +242,30 @@ if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['
             <?php
         }
         ?>
-
-
-        
-
-
-
-
-
-
-
         <input type="submit" name="modificarUsuarios" value="Modificar usuarios">
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=crearUsuario">Crear usuario</a>
     </form>
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <!--<div class="table-responsive">-->
-        
-    <!--</div>-->
     <?php
 }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////Tabla servicios////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||isset($_GET['inicioServicios'])) {
     $servicio = new Servicio($_SESSION['tipo']);
-    if (!$servicio->obtenerServicios()) {
+    //paginación
+    $total = count($servicio->obtenerServicios());
+    $paginas = ceil($total/$cuantos);
+    if (isset($_SESSION['paginaActual'])) {
+        $inicio = $_SESSION['paginaActual'] * $cuantos - $cuantos;
+    }else{
+        if (isset($_GET['inicioServicios'])) {
+            $inicio = $_GET['inicioServicios'];
+        }else{
+            $inicio = 0;
+        }
+    }
+    //servicios paginados
+    if (!$servicio->obtenerServiciosPaginacion($inicio,$cuantos)) {
         if (isset($_POST['servicios'])) {
             ?>
             <div class="alert alert-warning centrarAlert" role="alert">
@@ -314,7 +274,7 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
             <?php
         }
     }else{
-        $servicios = $servicio->obtenerServicios();
+        $servicios = $servicio->obtenerServiciosPaginacion($inicio,$cuantos);
     }
     if (isset($_POST['añadirYModificarServicios'])) {
         function validarServiciosExistentes($datos){
@@ -335,15 +295,11 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
             }
             return $cont;
         }
-
-
-        /////////////////////////////////////////
-        /////////////////////////////////////////
-        //htmlspecialcharts y trim de $_POST//
-        /////////////////////////////////////////
-        /////////////////////////////////////////
-
-
+        //htmlspecialcharts y trim de $_POST
+        foreach($_POST as $key => $value){
+            $_POST[$key] = htmlspecialchars(trim($value));
+        }
+        //divido el array en existentes y nuevos
         $serviciosExistentes = array_slice($_POST, 0, -3);
         $serviciosNuevos = array_slice($_POST, -3, -1);
         if (!validarServiciosExistentes($serviciosExistentes)) {
@@ -361,11 +317,11 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
                 </div>
                 <?php
             }else{
+                $err = false;
                 $msg = "";
-                if ($servicio->obtenerServicios()) {
+                if ($servicio->obtenerServiciosPaginacion($inicio,$cuantos)) {//paginados????
                     $msg .= "Los datos de servicios anteriores han sido actualizados";
                     //modifico los ya existentes
-                    $err = false;
                     for ($i=0; $i < count($servicios); $i++) { 
                         $servicio = new Servicio($_SESSION['tipo'],$servicios[$i]['id'],array_shift($serviciosExistentes),array_shift($serviciosExistentes));
                         if (!$servicio->modificarServicio()) {
@@ -438,55 +394,30 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
             }
         }
     }
-
-
-
-
-
-
-
-
-    
-    $total = count($servicios);
-    if (isset($_GET['inicioServicios'])) {
-        $inicio = $_GET['inicioServicios'];
-    }else{
-        $inicio = 0;
+    function llenarHoras(){
+        $horas = array();
+        $hora = 0;
+        $minutos = 0;
+        $cadena = str_pad($hora, 2, "0", STR_PAD_LEFT).":".str_pad($minutos, 2, "0", STR_PAD_LEFT);
+        array_push($horas,$cadena);
+        while ($cadena != "04:00") {
+            $minutos += 15;
+            if ($minutos>=60) {
+                $minutos -= 60;
+                $hora++;
+            }
+            $cadena = str_pad($hora, 2, "0", STR_PAD_LEFT).":".str_pad($minutos, 2, "0", STR_PAD_LEFT);
+            array_push($horas,$cadena);
+        }
+        return $horas;
     }
-    $cuantos = 10;
-    $paginas = ceil($total/$cuantos);
-
-
-
-
-
-
-
-
-
-
-
-
-    $horas = array(
-        "00:15",
-        "00:30",
-        "00:45",
-        "01:00",
-        "01:15",
-        "01:30",
-        "01:45",
-        "02:00",
-        "02:15",
-        "02:30",
-        "02:45",
-        "03:00",
-        "03:15",
-        "03:30",
-        "03:45",
-        "04:00"
-    );
+    //datos
+    $horas = llenarHoras();
     if ($servicio->obtenerServiciosPaginacion($inicio,$cuantos)) {
         $servicios = $servicio->obtenerServiciosPaginacion($inicio,$cuantos);
+    }else{
+        //si no hay servicios creo array vacio para que depsues en el for no de error
+        $servicios = array();
     }
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion" method="POST">
@@ -533,12 +464,8 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
                         }
                     }
                     ?>
-                    <!--añadir el form y el input hidden con el id-->
-                    <!--como se va a hacer por ajax, solomente hará falta añadirle un id al elemento i, para despues desde js cogerlo-->
                         <td>
-                        <!--ponerle un enlace a la papelera a ver si asi funciona...-->
-                        <!--<a id="eliminarUsuario" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Eliminar cuenta</a>-->
-                            <i id="<?php echo $value['id'] ?>" class="fas fa-trash-alt text-danger servicio"></i>
+                            <i class="fas fa-trash-alt text-danger servicio"></i>
                         </td>
                     </tr>
                     <?php
@@ -563,12 +490,8 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
                 </tr>
             </tbody>
         </table>
-
-
-
-
-
         <?php
+        //paginación
         if ($paginas>0) {
             ?>
             <nav id="paginacion" aria-label="...">
@@ -593,40 +516,13 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
             <?php
         }
         ?>
-
-
-
-
         <input type="submit" name="añadirYModificarServicios" value="Añadir / Modificar servicios">
     </form>
     <?php
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////Tabla horario////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_POST['modificarHorario'])) {
     $semana = array(
         "Lunes" => array(
@@ -653,7 +549,7 @@ if (isset($_POST['modificarHorario'])) {
             "cierreTarde" => $_POST['cierreTardeMiércoles'],
             "cerrado" => isset($_POST['cerradoMiércoles'])
         ),
-        "Jueves" => array(
+            "Jueves" => array(
             "dia" => "Jueves",
             "aperturaMañana" => $_POST['aperturaMañanaJueves'],
             "cierreMañana" => $_POST['cierreMañanaJueves'],
@@ -688,28 +584,40 @@ if (isset($_POST['modificarHorario'])) {
     );
     $horario = new Horario($_SESSION['tipo'],$semana['Lunes'],$semana['Martes'],$semana['Miércoles'],$semana['Jueves'],$semana['Viernes'],$semana['Sábado'],$semana['Domingo']);
     $horario->modificarDias();
-?>
-<div class="alert alert-success centrarAlert" role="alert">
+    ?>
+    <div class="alert alert-success centrarAlert" role="alert">
         El horario ha sido modificado.
-</div>
-<?php
+    </div>
+    <?php
 }
 if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
-    //iniciar objeto horario
-    //if (isset($_POST['tipo'])) {
-        $horario = new Horario($_SESSION['tipo']);
-    //}else{
-        //$horario = new Horario();//vacio
-    //}
+    function llenarHoras(){
+        $horas = array();
+        $hora = 0;
+        $minutos = 0;
+        $cadena = str_pad($hora, 2, "0", STR_PAD_LEFT).":".str_pad($minutos, 2, "0", STR_PAD_LEFT);
+        array_push($horas,$cadena);
+        while ($cadena != "23:45") {
+            $minutos += 15;
+            if ($minutos>=60) {
+                $minutos -= 60;
+                $hora++;
+            }
+            $cadena = str_pad($hora, 2, "0", STR_PAD_LEFT).":".str_pad($minutos, 2, "0", STR_PAD_LEFT);
+            array_push($horas,$cadena);
+        }
+        return $horas;
+    }
+    //datos
+    $horas = llenarHoras();
+    $horario = new Horario($_SESSION['tipo']);
     if ($horario->obtenerDias()) {
         ?>
         <div class="alert alert-warning centrarAlert" role="alert">
             No habia ningún horario disponible. El horario ha sido creado.
         </div>
         <?php
-    }//tabla estaba fuera del else, no habia else
-//$horario->obtenerDias();
-    //añadir arrays asociativos de todos los dias con los datos de la bd
+    }
     $semana = array(
         "Lunes" => $horario->get_lunes(),
         "Martes" => $horario->get_martes(),
@@ -718,100 +626,6 @@ if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
         "Viernes" => $horario->get_viernes(),
         "Sabado" => $horario->get_sabado(),
         "Domingo" => $horario->get_domingo()
-    );
-    $horas = array(
-        "00:00",
-        "00:15",
-        "00:30",
-        "00:45",
-        "01:00",
-        "01:15",
-        "01:30",
-        "01:45",
-        "02:00",
-        "02:15",
-        "02:30",
-        "02:45",
-        "03:00",
-        "03:15",
-        "03:30",
-        "03:45",
-        "04:00",
-        "04:15",
-        "04:30",
-        "04:45",
-        "05:00",
-        "05:15",
-        "05:30",
-        "05:45",
-        "06:00",
-        "06:15",
-        "06:30",
-        "06:45",
-        "07:00",
-        "07:15",
-        "07:30",
-        "07:45",
-        "08:00",
-        "08:15",
-        "08:30",
-        "08:45",
-        "09:00",
-        "09:15",
-        "09:30",
-        "09:45",
-        "10:00",
-        "10:15",
-        "10:30",
-        "10:45",
-        "11:00",
-        "11:15",
-        "11:30",
-        "11:45",
-        "12:00",
-        "12:15",
-        "12:30",
-        "12:45",
-        "13:00",
-        "13:15",
-        "13:30",
-        "13:45",
-        "14:00",
-        "14:15",
-        "14:30",
-        "14:45",
-        "15:00",
-        "15:15",
-        "15:30",
-        "15:45",
-        "16:00",
-        "16:15",
-        "16:30",
-        "16:45",
-        "17:00",
-        "17:15",
-        "17:30",
-        "17:45",
-        "18:00",
-        "18:15",
-        "18:30",
-        "18:45",
-        "19:00",
-        "19:15",
-        "19:30",
-        "19:45",
-        "20:00",
-        "21:15",
-        "21:30",
-        "21:45",
-        "22:00",
-        "22:15",
-        "22:30",
-        "22:45",
-        "23:00",
-        "23:15",
-        "23:30",
-        "23:45"
     );
     $horario->obtenerDias();
     $semana = array(
@@ -877,17 +691,4 @@ if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
     <?php
 }
 ?>
-
-
-
-
-
-
-
-    
-
-
-
-
-
 </section>

@@ -1,5 +1,6 @@
 $(function() {
     $("#eliminarUsuario").click(function(){
+        var nick = $("input[name='nick']").val();
         var respuesta = confirm("¿Seguro que quiere eliminar este usuario?");
         if (respuesta) {
             $.ajax({
@@ -10,12 +11,12 @@ $(function() {
                 data: { condicion: "eliminarUsuario"},
                 success:function(resultado){
                     // imprime "resultado Funcion"
-                    alert("El usuario {nick} ha sido eliminado");//poner para que ponga el nick de usuario
+                    alert("El usuario " + nick + " ha sido eliminado");//poner para que ponga el nick de usuario
                     $(location).attr('href', window.location.pathname);
                 }
             })
         }else{
-            alert("El usuario {nick} no ha podido ser eliminado");
+            alert("El usuario " + nick + " no ha podido ser eliminado");
         }
     });
 });
