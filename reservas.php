@@ -1,6 +1,17 @@
 <?php
 require "class/cita.php";
 require "class/usuario.php";
+//eliminar un servicio
+function eliminarCita($id){
+    $cita = new Cita($_SESSION['tipo'],$id);
+    $cita->eliminarCita();
+}
+if(isset($_REQUEST["reserva"])){
+    //require "class/cita.php";
+    echo eliminarCita($_REQUEST["reserva"]);
+    //echo array_push($_POST,"servicios"=>"");
+    exit();
+}
 //eliminar la página actual en la que esto (paginación)
 function eliminarPaginaActual(){
     if (isset($_SESSION['paginaActual'])) {
@@ -50,7 +61,17 @@ if(isset($_REQUEST["paginaActual"])){
     if (!$cita->obtenerCitasPaginacion($inicio,$cuantos)) {
         ?>
         <div class="alert alert-warning centrarAlert" role="alert">
-            No hay ningún servicio disponible. Creelo.
+            <?php
+            if ($_SESSION['tipo']=="Cliente") {
+                ?>
+                No hay ninguna reserva en su nombre. Creela.
+                <?php
+            }else{
+                ?>
+                No hay ninguna reserva disponible. Creela.
+                <?php
+            }
+            ?>
         </div>
         <?php
         $citas = array();
@@ -61,7 +82,7 @@ if(isset($_REQUEST["paginaActual"])){
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="text-danger" scope="col">CITAS</th>
+                <th class="text-danger" scope="col">RESERVAS</th>
                 <th scope="col">Motivos</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Tiempo necesario</th>
@@ -93,85 +114,47 @@ if(isset($_REQUEST["paginaActual"])){
                         <?php
                     }
                 }
-
-
-
-
-
-
-                /*if ($key2=="tiempo") {
-                ?>
-                <td>
-                    <select name="<?php echo $key2.$value['id'] ?>">
-                    <?php
-                    foreach ($horas as $hora){
-                        echo "<option value='$hora'";
-                        if ($hora==substr($value2, 0, -3)) {
-                            echo "selected='selected'";
-                        }
-                        echo ">$hora</option>";
-                    }
-                    ?>
-                    </select>
-                </td>
-                <?php
-                }else if ($key2!="id") {
-                    ?>
-                    <td><input type="text" name="<?php echo $key2.$value['id'] ?>" value="<?php echo $value2 ?>"></td>
-                    <?php
-                }else{
-                    ?>
-                    <td><?php echo $value2 ?></td>
-                    <?php
-                }*/
             }
             ?>
                 <td>
-                    <i class="fas fa-trash-alt text-danger servicio"></i>
+                    <i class="far fa-file-pdf text-danger pdf"></i>
+                </td>
+                <td>
+                    <i class="fas fa-trash-alt text-danger reserva"></i>
                 </td>
             </tr>
             <?php
         }
     }
-
-
-
-
-
-
     ?>
-            </tbody>
-        </table>
-        <?php
-        //paginación
-        if ($paginas>0) {
-            ?>
-            <nav id="paginacion" aria-label="...">
-                <ul class="pagination">
-                    <li class="page-item <?php if ($inicio==0) { echo "disabled"; } ?>">
-                        <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas&inicioServicios=<?php echo $inicio-$cuantos ?>" <?php if ($inicio==0) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Anteriores</a>
+        </tbody>
+    </table>
+    <?php
+    //paginación
+    if ($paginas>0) {
+        ?>
+        <nav id="paginacion" aria-label="...">
+            <ul class="pagination">
+                <li class="page-item <?php if ($inicio==0) { echo "disabled"; } ?>">
+                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas&inicioServicios=<?php echo $inicio-$cuantos ?>" <?php if ($inicio==0) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Anteriores</a>
+                </li>
+                <?php
+                for ($i=1; $i <= $paginas; $i++) {
+                    ?>
+                    <li class="page-item <?php if (ceil($inicio/$cuantos)+1==$i) { echo "active"; } ?>">
+                        <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas&inicioServicios=<?php echo $cuantos*($i-1) ?>"><?php echo $i ?></a>
                     </li>
                     <?php
-                    for ($i=1; $i <= $paginas; $i++) {
-                        ?>
-                        <li class="page-item <?php if (ceil($inicio/$cuantos)+1==$i) { echo "active"; } ?>">
-                            <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas&inicioServicios=<?php echo $cuantos*($i-1) ?>"><?php echo $i ?></a>
-                        </li>
-                        <?php
-                    }
-                    ?>
-                    <li class="page-item <?php if ($inicio>=$total-$cuantos) { echo "disabled"; } ?>">
-                        <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas&inicioServicios=<?php echo $inicio+$cuantos ?>" <?php if ($inicio>=$total-$cuantos) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Siguientes</a>
-                    </li>
-                </ul>
-            </nav>
-            <?php
-        }
-        ?>
+                }
+                ?>
+                <li class="page-item <?php if ($inicio>=$total-$cuantos) { echo "disabled"; } ?>">
+                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=reservas&inicioServicios=<?php echo $inicio+$cuantos ?>" <?php if ($inicio>=$total-$cuantos) { echo "tabindex='-1' aria-disabled='true'"; } ?>>Siguientes</a>
+                </li>
+            </ul>
+        </nav>
+        <?php
+    }
+    ?>
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=citas">Reserva una cita ahora</a>
-
-
-
-
     </article>
 </section>

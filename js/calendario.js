@@ -159,4 +159,7 @@ $(function() {
              }
          })
     });
+    $("input[type='submit']").click(function(){
+        alert("Procesando su solicitud de reserva");
+    });
 });

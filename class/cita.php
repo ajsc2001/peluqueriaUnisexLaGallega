@@ -84,5 +84,11 @@ Class Cita{
         Conexion::desconectarBD($conexion);
         return $citas;
     }
+    function eliminarCita(){
+        $conexion = Conexion::conectarBD($this->tipo);
+        $sql = "DELETE FROM citas WHERE id='$this->id'";
+        $conexion->query($sql);
+        Conexion::desconectarBD($conexion);
+    }
 }
 ?>

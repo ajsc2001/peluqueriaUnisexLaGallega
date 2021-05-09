@@ -50,4 +50,24 @@ $(function (){
             })
         }
       });
+      $("i.reserva").click(function(){
+        var id_reserva = $(this).parent().siblings(":first-child").text();
+        var respuesta = confirm("¿Seguro que quiere eliminar la reserva nº" + id_reserva + "?");
+        if (respuesta) {
+            $.ajax({
+                // aqui va la ubicación de la página PHP
+                url: window.location.pathname + "?p=reservas",
+                type: 'POST',
+                dataType: 'html',
+                data: {reserva: id_reserva},
+                success:function(resultado){
+                    alert("La reserva nº" + id_reserva + " ha sido eliminada");
+                    //fuerzo recarga de la página y hago click en el mismo boton para actualizar la tabla
+                    $(location).attr('href', window.location.pathname + "?p=reservas");
+                }
+            })
+        }else{
+            alert("La reserva nº" + id_reserva + " no ha sido eliminada");
+        }  
+    });
 });

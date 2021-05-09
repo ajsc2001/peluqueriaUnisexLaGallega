@@ -30,12 +30,21 @@ if (isset($_GET['p'])&&$_GET['p']=="cuenta") {
     <script src="js/eliminarUsuario.js"></script>
     <?php
 }
+if (isset($_GET['p'])&&$_GET['p']=="reservas") {
+    ?>
+    <script src="js/reservas.js"></script>
+    <?php
+}
 if (isset($_GET['p'])&&$_GET['p']=="administracion") {
     ?>
     <script src="js/administracion.js"></script>
     <?php
 }
 ?>
+    <noscript>
+        <p>La ejecución de scripts no es compatible con su navegador o esta desabilitada la ejecución de los mismos.</p>
+        <p>La página no funcionará correctamente, activelos si es posible</p>
+    </noscript>
     <link rel="stylesheet" href="styles.css">
 </head>
 

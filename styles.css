@@ -183,7 +183,10 @@ table{
     font-weight:bold;
     font-size:3rem;
 }
-
+#menus{
+    display:flex;
+    justify-content:space-between;
+}
 
 
 

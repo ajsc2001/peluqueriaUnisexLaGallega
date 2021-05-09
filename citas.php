@@ -352,80 +352,49 @@ if (isset($_POST['reservar'])) {
                                         $minutos -= 60;
                                     }
                                 } while ($cadena != substr($dia['cierreTarde'],0,-3));
-
-
-                                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             }
                         }else{
                             $horas = todasLasHoras($dia);
                         }
                         return $horas;
                     }
-
-
-
-
-
-
-
-
-
-
                     $horas = llenarHoras($dia);
-
-
-
-
-
-
-
-                    $servicios = $servicio->obtenerServicios();
-                    ?>
-                    <h2>Motivo/s:</h2>
-                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=citas" method="POST">
-                        <div id="motivos">
-                            <?php
-                            foreach($servicios as $servicio){
-                                ?>
-                                <label><input type="checkbox" name="motivos[<?php echo $servicio['nombre'] ?>]" value="<?php echo substr($servicio['tiempo'], 0, -3) ?>"><span><?php echo $servicio['nombre'] ?></span></label>
-                                <?php
-                            }
-                            ?>
+                    if (count($horas)<1) {
+                        ?>
+                        <div class="alert alert-warning centrarAlert" role="alert">
+                            No hay ninguna hora disponible. Pongase en <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">contacto</a> con nosotros.
                         </div>
-                        <select name="fecha">
-                            <option value=""></option>
-                            <?php
-                            foreach ($horas as $hora){
-                                echo "<option value='$hora'";
-                                /*if ($hora==substr($value2, 0, -3)) {
-                                    echo "selected='selected'";
-                                }*/
-                                echo ">$hora</option>";
-                            }
-                            ?>
-                        </select>
-                        <input type="submit" name="reservar" value="Reservar">
-                    </form>
-                    <?php
+                        <?php
+                    }else{
+                        $servicios = $servicio->obtenerServicios();
+                        ?>
+                        <h2>Motivo/s:</h2>
+                        <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=citas" method="POST">
+                            <div id="motivos">
+                                <?php
+                                foreach($servicios as $servicio){
+                                    ?>
+                                    <label><input type="checkbox" name="motivos[<?php echo $servicio['nombre'] ?>]" value="<?php echo substr($servicio['tiempo'], 0, -3) ?>"><span><?php echo $servicio['nombre'] ?></span></label>
+                                    <?php
+                                }
+                                ?>
+                            </div>
+                            <select name="fecha">
+                                <option value=""></option>
+                                <?php
+                                foreach ($horas as $hora){
+                                    echo "<option value='$hora'";
+                                    /*if ($hora==substr($value2, 0, -3)) {
+                                        echo "selected='selected'";
+                                    }*/
+                                    echo ">$hora</option>";
+                                }
+                                ?>
+                            </select>
+                            <input type="submit" name="reservar" value="Reservar">
+                        </form>
+                        <?php
+                    }
                 }
             }
         }else{
