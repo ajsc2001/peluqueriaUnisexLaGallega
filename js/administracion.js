@@ -92,40 +92,99 @@ $(function() {
             alert("El usuario nº" + id_usuario + " no ha sido eliminado");
         }  
     });
-
-
-
-
-
-
-
-    
-
-    $("aperturaMañanaLunes").change(function(){
-        alert("aperturaMañanaLunes").val();
-    });
-
-
-
-
     var diasSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+    var horaSeleccionada = 0;
+    var minutosSeleccionados = 0;
+    var hora = 0;
+    var minutos = 0;
+    //apertura mañana
     for (let i = 0; i < diasSemana.length; i++) {
-        $("aperturaMañana"+diasSemana[i]).change(function(){
-            alert(this).val();
+        $("select[name='aperturaMañana"+diasSemana[i]+"']").change(function(){
+            //cada elemento
+            horaSeleccionada = parseInt($(this).val().substring(0,2));
+            minutosSeleccionados = parseInt($(this).val().substring(3));
+            $("select[name='cierreMañana"+diasSemana[i]+"'] option").each(function(){
+                hora = parseInt($(this).val().substring(0,2));
+                minutos = parseInt($(this).val().substring(3));
+                if (hora<horaSeleccionada) {
+                    $(this).remove();
+                }else if (hora==horaSeleccionada) {
+                    if (minutos<=minutosSeleccionados) {
+                        $(this).remove();
+                    }
+                }
+            });
+            $("select[name='aperturaTarde"+diasSemana[i]+"'] option").each(function(){
+                hora = parseInt($(this).val().substring(0,2));
+                minutos = parseInt($(this).val().substring(3));
+                if (hora<horaSeleccionada) {
+                    $(this).remove();
+                }else if (hora==horaSeleccionada) {
+                    if (minutos<=minutosSeleccionados) {
+                        $(this).remove();
+                    }
+                }
+            });
+            $("select[name='cierreTarde"+diasSemana[i]+"'] option").each(function(){
+                hora = parseInt($(this).val().substring(0,2));
+                minutos = parseInt($(this).val().substring(3));
+                if (hora<horaSeleccionada) {
+                    $(this).remove();
+                }else if (hora==horaSeleccionada) {
+                    if (minutos<=minutosSeleccionados) {
+                        $(this).remove();
+                    }
+                }
+            });
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //cierre mañana
+    for (let i = 0; i < diasSemana.length; i++) {
+        $("select[name='cierreMañana"+diasSemana[i]+"']").change(function(){
+            //cada elemento
+            horaSeleccionada = parseInt($(this).val().substring(0,2));
+            minutosSeleccionados = parseInt($(this).val().substring(3));
+            $("select[name='aperturaTarde"+diasSemana[i]+"'] option").each(function(){
+                hora = parseInt($(this).val().substring(0,2));
+                minutos = parseInt($(this).val().substring(3));
+                if (hora<horaSeleccionada) {
+                    $(this).remove();
+                }else if (hora==horaSeleccionada) {
+                    if (minutos<=minutosSeleccionados) {
+                        $(this).remove();
+                    }
+                }
+            });
+            $("select[name='cierreTarde"+diasSemana[i]+"'] option").each(function(){
+                hora = parseInt($(this).val().substring(0,2));
+                minutos = parseInt($(this).val().substring(3));
+                if (hora<horaSeleccionada) {
+                    $(this).remove();
+                }else if (hora==horaSeleccionada) {
+                    if (minutos<=minutosSeleccionados) {
+                        $(this).remove();
+                    }
+                }
+            });
+        });
+    }
+    //apertura tarde
+    for (let i = 0; i < diasSemana.length; i++) {
+        $("select[name='aperturaTarde"+diasSemana[i]+"']").change(function(){
+            //cada elemento
+            horaSeleccionada = parseInt($(this).val().substring(0,2));
+            minutosSeleccionados = parseInt($(this).val().substring(3));
+            $("select[name='cierreTarde"+diasSemana[i]+"'] option").each(function(){
+                hora = parseInt($(this).val().substring(0,2));
+                minutos = parseInt($(this).val().substring(3));
+                if (hora<horaSeleccionada) {
+                    $(this).remove();
+                }else if (hora==horaSeleccionada) {
+                    if (minutos<=minutosSeleccionados) {
+                        $(this).remove();
+                    }
+                }
+            });
+        });
+    }
 });

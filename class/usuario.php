@@ -66,7 +66,6 @@ require "lib/codificacion.php";
 				$this->añadirUsuario();
 				return true;
 			}
-			
 		}
 		function añadirUsuario(){
 			$conexion = Conexion::conectarBD($this->tipo);

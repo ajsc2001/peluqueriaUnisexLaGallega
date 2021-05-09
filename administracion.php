@@ -147,7 +147,7 @@ if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['
     }
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion" method="POST">
-    <table class="table table-hover">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th class="text-danger" scope="col">USUARIOS</th>
@@ -593,11 +593,11 @@ if (isset($_POST['modificarHorario'])) {
 if (isset($_POST['horarios'])||isset($_POST['modificarHorario'])) {
     function llenarHoras(){
         $horas = array();
-        $hora = 0;
+        $hora = 8;
         $minutos = 0;
         $cadena = str_pad($hora, 2, "0", STR_PAD_LEFT).":".str_pad($minutos, 2, "0", STR_PAD_LEFT);
         array_push($horas,$cadena);
-        while ($cadena != "23:45") {
+        while ($cadena != "22:00") {
             $minutos += 15;
             if ($minutos>=60) {
                 $minutos -= 60;

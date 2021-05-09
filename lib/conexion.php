@@ -3,7 +3,7 @@
 		public static function conectarBD($tipoUsr){
 			$server = "localhost";
 			//hosting
-			/*$usr = "lagallega_".$tipoUsr;
+			/*$usr = "lagallega_root";
 			$pass = "Ccg_28112004";
 			$bd = "lagallega_peluqueria";*/
 			//local
