@@ -41,6 +41,21 @@ Class Servicio{
         Conexion::desconectarBD($conexion);
         return $servicios;
     }
+    function obtenerServiciosPorNombre($nombreServicios){
+        $servicios = array();
+        $conexion = Conexion::conectarBD($this->tipo_usr);
+        foreach($nombreServicios as $servicio){
+            $sql = "SELECT * FROM servicios WHERE nombre='$servicio'";
+            $result = $conexion->query($sql);
+            if (!$result->num_rows<1) {
+                $fila = $result->fetch_assoc();
+                array_push($servicios,$fila);
+            }
+        }
+        $result->free();//no se si hay que ponerlo
+        Conexion::desconectarBD($conexion);
+        return $servicios;
+    }
     function modificarServicio(){
         $conexion = Conexion::conectarBD($this->tipo_usr);
         $sql = "SELECT * FROM servicios WHERE nombre='$this->nombre'";

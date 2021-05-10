@@ -90,7 +90,7 @@ if (isset($_POST['enviar'])) {
         </form>
     </article>
     <article id="misDatos">
-        <p><strong>Correo:</strong> mi email</p>
+        <p><strong>Correo:</strong> lagallega_ccg@hotmail.com</p>
         <p><strong>Teléfonos:</strong> 653235994 - 965488166</p>
         <div id="redesSociales">
             <a href="https://wa.link/gfmfwf"><img src="img/whatsapp-logo.png" alt="Whatsapp"></a>

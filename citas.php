@@ -2,6 +2,7 @@
 require "class/servicio.php";
 require "class/horario.php";
 require "class/cita.php";
+require "class/usuario.php";
 function datosDia($diaSemana){
     $horario = new Horario($_SESSION['tipo']);
     $dia = $horario->obtenerDia($diaSemana);
@@ -71,6 +72,50 @@ if (isset($_POST['reservar'])) {
                 La reserva de su cita ha sido exitosa.
             </div>
             <?php
+            function url_actual(){
+                if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                    $url = "https://";
+                }else{
+                    $url = "http://";
+                }
+                return $url.$_SERVER['HTTP_HOST'];
+            }
+            $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo']);
+            $usuario->recuperarDatos();
+            $nombre = $usuario->get_nombre();
+            $apellidos = $usuario->get_apellidos();
+            $email = $usuario->get_email();
+            //correo
+            $to=$email;
+            $asunto = "Reserva de $nombre";//modificar asunto
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= "From: Peluquería Unisex 'La Gallega'<support@peluqueriaunisexlagallega.com>" . "\r\n";
+            //$headers .= "Cc: support@peluqueriaunisexlagallega.com" . "\r\n";
+            $contenido = "
+                <section>
+                    <p>Sr./Sra. <strong>$nombre</strong>,</p>
+                    <p>Su reserva ha sido exitosa.</p>
+                    <p>Esta planificada para la siguiente fecha: <strong>".substr($fecha,0,-3)."</strong></p>
+                    <p>Gracias por contar con nosotros.</p>
+                    <img src='".url_actual()."/img/logo.png' alt='LOGO' width='10%'>
+                </section>";
+            //enviar correo
+            if (mail($to,$asunto,$contenido,$headers)) {
+                //correo enviado corectamente
+                ?>
+                <div class="alert alert-success centrarAlert" role="alert">
+                    El correo ha sido enviado correctamente. Si usted no recibe una copia en los proximos 5 minutos vuelva a escribirnos o pongase en contacto con nosotros por otra via.
+                </div>
+            <?php
+            }else{
+                //el correo no se ha podido enviar
+            ?>
+            <div class="alert alert-danger centrarAlert" role="alert">
+                El correo no ha sido enviado. Ha ocurrido un error. Vuelva a intentarlo o pongase en contacto con nosotros por otra via.
+            </div>
+            <?php
+            }
         }else{
             ?>
             <div class="alert alert-danger centrarAlert" role="alert">
@@ -391,6 +436,13 @@ if (isset($_POST['reservar'])) {
                                 }
                                 ?>
                             </select>
+                            <?php
+                            /*if ($_SESSION['tipo']!="Cliente") {
+                                ?>
+                                <td><?php echo $value2 ?></td>
+                                <?php
+                            }*/
+                            ?>
                             <input type="submit" name="reservar" value="Reservar">
                         </form>
                         <?php

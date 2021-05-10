@@ -35,6 +35,18 @@ Class Cita{
 	    $conexion->query($sql);
 	    Conexion::desconectarBD($conexion);
     }
+	function obtenerCita(){
+        $cita = false;
+        $conexion = Conexion::conectarBD($this->tipo_usr);
+        $sql = "SELECT * FROM citas WHERE id='$this->id'";
+        $result = $conexion->query($sql);
+        if (!$result->num_rows<1) {
+            $cita = $result->fetch_assoc();
+        }
+        $result->free();//no se si hay que ponerlo
+        Conexion::desconectarBD($conexion);
+        return $cita;
+    }
 	function obtenerCitas(){
         $citas = array();
         $conexion = Conexion::conectarBD($this->tipo_usr);

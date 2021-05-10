@@ -1,6 +1,19 @@
 <?php
 require "class/cita.php";
 require "class/usuario.php";
+
+
+
+/*if(isset($_REQUEST["reserva"])){
+    //require "class/cita.php";
+    echo require "lib/generarPDF.php";
+    echo $id_reserva = $_REQUEST["reserva"];
+    //echo array_push($_POST,"servicios"=>"");
+    exit();
+}*/
+
+
+
 //eliminar un servicio
 function eliminarCita($id){
     $cita = new Cita($_SESSION['tipo'],$id);
@@ -31,19 +44,7 @@ if(isset($_REQUEST["paginaActual"])){
 ?>
 <h1>Mis reservas:</h1>
 <section id="reservas">
-    <article>
-        aqui va la informacion de la reservas: fecha y hora de la cita.
-    </article>
-    <article>
-        tambien tendrá a la derecha del todo una "x" o algo para cancelar la cita
-    </article>
-    <article>
-        aqui estan mis reservas
-        seguramente quitaré el article y lo dejaré a pelo en section
-    </article>
-
-
-    <article class="table-responsive">
+<article class="table-responsive">
     <?php
     $cita = new Cita($_SESSION['tipo']);
     //paginación
@@ -103,21 +104,19 @@ if(isset($_REQUEST["paginaActual"])){
             <tr>
             <?php
             foreach ($value as $key2 => $value2){
-                if ($key2!="id_usuario") {
+                if ($key2=="tiempo"||$key2=="fecha") {
+                    ?>
+                    <td><?php echo substr($value2,0,-3) ?></td>
+                    <?php
+                }else if ($key2!="id_usuario") {
                     ?>
                     <td><?php echo $value2 ?></td>
                     <?php
-                }else{
-                    if ($_SESSION['tipo']!="Cliente") {
-                        ?>
-                        <td><?php echo $value2 ?></td>
-                        <?php
-                    }
                 }
             }
             ?>
                 <td>
-                    <i class="far fa-file-pdf text-danger pdf"></i>
+                    <a target="_blank" href="lib/generarPDF.php?id=<?php echo $citas[$key]['id'] ?>"><i class="far fa-file-pdf text-danger pdf"></i></a>
                 </td>
                 <td>
                     <i class="fas fa-trash-alt text-danger reserva"></i>

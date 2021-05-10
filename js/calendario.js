@@ -94,24 +94,42 @@ $(function() {
     //click en datepicker
     $("#datepicker").datepicker({
         onSelect: function(dateText, inst) {
+            var fechaCorrecta = true;
             var fecha = $(this).datepicker( 'getDate' ); //coge fecha usando objeto date
-            sessionStorage.setItem("fecha",fecha);
-            var diasSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-            var cadenaFecha = fecha.getFullYear() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getDate();
-            //quitar ajax, no necesario, solo la redireccion
-            $.ajax({
-                // aqui va la ubicación de la página PHP
-               url: window.location.pathname + parametrosURL[0],
-               type: 'POST',
-               dataType: 'html',
-               //data: diasSemana[fecha.getDay()],
-               data: { condicion: "datosDia", date: cadenaFecha},
-               success:function(resultado){
-                   // imprime "resultado Funcion"
-                   //console.log(resultado);
-                   $(location).attr('href', window.location.pathname + parametrosURL[0] + '&d=' + diasSemana[fecha.getDay()]);
+            var fechaActual = new Date();
+            if (fecha.getFullYear()<fechaActual.getFullYear()) {
+                fechaCorrecta = false;
+            }else if(fecha.getFullYear()==fechaActual.getFullYear()){
+                if (fecha.getMonth()<fechaActual.getMonth()) {
+                    fechaCorrecta = false;
+                }else if (fecha.getMonth()==fechaActual.getMonth()) {
+                    if (fecha.getDate()<fechaActual.getDate()) {
+                        fechaCorrecta = false;
+                    }
                 }
-            })
+            }
+            if (fechaCorrecta) {
+                sessionStorage.setItem("fecha",fecha);
+                var diasSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+                var cadenaFecha = fecha.getFullYear() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getDate();
+                //quitar ajax, no necesario, solo la redireccion
+                $.ajax({
+                    // aqui va la ubicación de la página PHP
+                    url: window.location.pathname + parametrosURL[0],
+                    type: 'POST',
+                    dataType: 'html',
+                    //data: diasSemana[fecha.getDay()],
+                    data: { condicion: "datosDia", date: cadenaFecha},
+                    success:function(resultado){
+                        // imprime "resultado Funcion"
+                        //console.log(resultado);
+                        $(location).attr('href', window.location.pathname + parametrosURL[0] + '&d=' + diasSemana[fecha.getDay()]);
+                    }
+                })
+            }else{
+                alert("No puede realizar ninguna acción sobre un día que ya ha transcurrido");
+                $(location).attr('href', window.location.pathname + parametrosURL[0]);
+            } 
         }
     });
     if ($("input[type=checkbox]")) {
@@ -160,6 +178,6 @@ $(function() {
          })
     });
     $("input[type='submit']").click(function(){
-        alert("Procesando su solicitud de reserva");
+        alert("Procesando su solicitud de reserva, le llegará un correo de confirmación en un maximo de 5 minutos si su cita ha sido aceptada");
     });
 });

@@ -22,15 +22,31 @@
             }else if (isset($_GET['p'])&& $_GET['p']=="crearUsuario") {
                 require "crearUsuario.php";
             }else if (isset($_GET['p'])&& $_GET['p']=="cuenta") {
-                require "cuenta.php";
+                if (!isset($_SESSION['id'])) {
+                    header("Location: index.php?p=login");
+                }else{
+                    require "cuenta.php";
+                }
             }else if (isset($_GET['p'])&& $_GET['p']=="reservas") {
-                require "reservas.php";
+                if (!isset($_SESSION['id'])) {
+                    header("Location: index.php?p=login");
+                }else{
+                    require "reservas.php";
+                }
             }else if (isset($_GET['p'])&& $_GET['p']=="administracion") {
-                require "administracion.php";
+                if (isset($_SESSION['tipo'])&&$_SESSION['tipo']!="Administrador") {
+                    header("Location: index.php");
+                }else{
+                    require "administracion.php";
+                }
             }else if (isset($_GET['p'])&& $_GET['p']=="logout") {
-                //elimino todas las variables de sesion y creo unicamente el tipo
-                session_unset();
-				header("Location: index.php");
+                if (!isset($_SESSION['id'])) {
+                    header("Location: index.php?p=login");
+                }else{
+                    //elimino todas las variables de sesion y creo unicamente el tipo
+                    session_unset();
+				    header("Location: index.php");
+                }
             }
         ?>
     </main>

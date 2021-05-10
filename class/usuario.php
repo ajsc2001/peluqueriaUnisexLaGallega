@@ -1,5 +1,17 @@
 <?php
-require "lib/codificacion.php";
+function url_actual(){
+	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+	  $url = "https://"; 
+	}else{
+	  $url = "http://"; 
+	}
+	return $url . $_SERVER['HTTP_HOST'] .  $_SERVER['REQUEST_URI'];
+}
+if (strpos(url_actual(),"id")) {
+	require "codificacion.php";
+}else{
+	require "lib/codificacion.php";
+}
 	Class Usuario{
 		private $id;
 		private $tipo;
@@ -91,6 +103,18 @@ require "lib/codificacion.php";
 			}
 			$result->free();
 			Conexion::desconectarBD($conexion);
+		}
+		function obtenerUsuario(){
+			$usuario = false;
+			$conexion = Conexion::conectarBD($this->tipo);
+			$sql = "SELECT * FROM usuarios";
+			$result = $conexion->query($sql);
+			if (!$result->num_rows<1) {
+				$usuario = $result->fetch_assoc();
+			}
+			$result->free();//no se si hay que ponerlo
+			Conexion::desconectarBD($conexion);
+			return $usuario;
 		}
 		function obtenerUsuarios(){
 			$usuarios = array();
