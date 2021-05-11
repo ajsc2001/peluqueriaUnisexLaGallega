@@ -6,7 +6,6 @@ Class Cita{
     private $fecha;
     private $tiempo;
     private $id_usuario;
-    //poner usuario de visitante como base
     function __construct($tipo_usr="Cliente",$id="",$motivos="",$fecha="",$tiempo="",$id_usuario=""){
 		$this->tipo_usr = $tipo_usr;
 		$this->id = $id;
@@ -26,7 +25,7 @@ Class Cita{
 				return false;
 			}
 		}
-		$result->free();//no se si hay que ponerlo
+		$result->free();
 		Conexion::desconectarBD($conexion);
 	}
 	function añadirCita(){
@@ -43,7 +42,7 @@ Class Cita{
         if (!$result->num_rows<1) {
             $cita = $result->fetch_assoc();
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $cita;
     }
@@ -54,11 +53,10 @@ Class Cita{
         $result = $conexion->query($sql);
         if (!$result->num_rows<1) {
             while ($fila = $result->fetch_assoc()) {
-                //los añado al array de objetos
                 array_push($citas,$fila);
             };
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $citas;
     }
@@ -69,11 +67,10 @@ Class Cita{
         $result = $conexion->query($sql);
         if (!$result->num_rows<1) {
             while ($fila = $result->fetch_assoc()) {
-                //los añado al array de objetos
                 array_push($citas,$fila);
             };
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $citas;
     }
@@ -88,11 +85,10 @@ Class Cita{
         $result = $conexion->query($sql);
         if (!$result->num_rows<1) {
             while ($fila = $result->fetch_assoc()) {
-                //los añado al objeto
                 array_push($citas,$fila);
             };
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $citas;
     }

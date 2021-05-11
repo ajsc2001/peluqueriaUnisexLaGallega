@@ -16,19 +16,13 @@ function validarDatos($datos){
     return $msg;
 }
 function eliminarUsuario(){
-    $usuario = new Usuario(/*$_SESSION['id']*/"",$_SESSION['tipo']);
+    $usuario = new Usuario("",$_SESSION['tipo']);
     $usuario->eliminarUsuario();
     session_unset();
 }
 if(isset($_REQUEST["condicion"])){
-    // si llega la condicion, y es igual a la condicion que necesitas para entrar ejecuta la función y devuelve el resultado
     if($_REQUEST["condicion"] == "eliminarUsuario" ){
        echo eliminarUsuario();
-       // salimos de la pagina php y devolvemos la respuesta
-       exit();
-    }else{
-       echo "otra funcion o respuesta";
-       // salimos de la pagina php y devolvemos la respuesta
        exit();
     }
 }else{
@@ -63,10 +57,9 @@ if(isset($_REQUEST["condicion"])){
 		    <?php
 	    }else{
 		    if (isset($_POST['nick'])) {//si existe uno de los parametros que hay entonces creo user
-                //revisar como hacer lo de usuario, crear sets o hacer otra  variable de usuario
 			    $usuario = new Usuario($_SESSION["id"],$_SESSION["tipo"],$nick,$contraseña,$email,$telefono,$nombre,$apellidos,$edad);
 			    if ($usuario->modificarUsuario()) {
-                    //crear sesion del objeto
+                    //crear variables sesion
 				    $_SESSION["id"] = $usuario->get_id();
 				    $_SESSION["tipo"] = $usuario->get_tipo();
 				    $_SESSION["nombre"] = $usuario->get_nombre();
@@ -102,6 +95,5 @@ if(isset($_REQUEST["condicion"])){
             <input type="submit" name="modificar" value="Modificar datos">
         </form>
     </article>
-    <!--Eliminar cuanta desde la función de eliminar cuenta y redirigir a la home-->
     <a id="eliminarUsuario" href="<?php echo $_SERVER['PHP_SELF'] ?>?p=cuenta">Eliminar cuenta</a>
 </section>

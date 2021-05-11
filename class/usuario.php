@@ -1,13 +1,17 @@
 <?php
-function url_actual(){
+function url_actual($donde){
 	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 	  $url = "https://"; 
 	}else{
 	  $url = "http://"; 
 	}
-	return $url . $_SERVER['HTTP_HOST'] .  $_SERVER['REQUEST_URI'];
+	if($donde=="clase"){//como uso esta funcion desde 2 paginas distintas, en una me hace falta la url completa y en otra no, por lo que envio una variable a la funcion apra saber de que caso se trata
+	    return $url . $_SERVER['HTTP_HOST'] .  $_SERVER['REQUEST_URI'];
+	}else{
+	    return $url.$_SERVER['HTTP_HOST'];
+	}
 }
-if (strpos(url_actual(),"id")) {
+if (strpos(url_actual("clase"),"id")) {
 	require "codificacion.php";
 }else{
 	require "lib/codificacion.php";
@@ -22,7 +26,6 @@ if (strpos(url_actual(),"id")) {
 		private $nombre;
 		private $apellidos;
 		private $edad;
-		//cambiar tipo usuario por defecto a visitante
 		function __construct($id="",$tipo="Cliente",$nick="",$contraseña="",$email="",$telefono="",$nombre="",$apellidos="",$edad=""){
 			$this->id = $id;
 			$this->tipo = $tipo;
@@ -71,7 +74,7 @@ if (strpos(url_actual(),"id")) {
 						return false;
 					}
 				}
-				$result->free();//no se si hay que ponerlo
+				$result->free();
 				Conexion::desconectarBD($conexion);
 			}else{
 				$this->tipo = "Administrador";
@@ -112,7 +115,7 @@ if (strpos(url_actual(),"id")) {
 			if (!$result->num_rows<1) {
 				$usuario = $result->fetch_assoc();
 			}
-			$result->free();//no se si hay que ponerlo
+			$result->free();
 			Conexion::desconectarBD($conexion);
 			return $usuario;
 		}
@@ -123,11 +126,10 @@ if (strpos(url_actual(),"id")) {
 			$result = $conexion->query($sql);
 			if (!$result->num_rows<1) {
 				while ($fila = $result->fetch_assoc()) {
-					//los añado al objeto
 					array_push($usuarios,$fila);
 				};
 			}
-			$result->free();//no se si hay que ponerlo
+			$result->free();
 			Conexion::desconectarBD($conexion);
 			return $usuarios;
 		}
@@ -138,11 +140,10 @@ if (strpos(url_actual(),"id")) {
 			$result = $conexion->query($sql);
 			if (!$result->num_rows<1) {
 				while ($fila = $result->fetch_assoc()) {
-					//los añado al objeto
 					array_push($usuarios,$fila);
 				};
 			}
-			$result->free();//no se si hay que ponerlo
+			$result->free();
 			Conexion::desconectarBD($conexion);
 			return $usuarios;
 		}
@@ -192,8 +193,7 @@ if (strpos(url_actual(),"id")) {
 					return true;
 				}else{
 					$fila = $result->fetch_assoc();
-					//si la fila tiene mi id entonces actualizo igualmente
-					if ($fila['id']==$this->id) {
+					if ($fila['id']==$this->id) {//si la fila tiene mi id entonces actualizo igualmente
 						$this->modificarDatos();
 						return true;
 					}else{
@@ -201,7 +201,7 @@ if (strpos(url_actual(),"id")) {
 					}
 				}
 			}
-			$result->free();//no se si hay que ponerlo
+			$result->free();
 			Conexion::desconectarBD($conexion);
 		}
 		function modificarDatos(){
@@ -210,7 +210,6 @@ if (strpos(url_actual(),"id")) {
 				$sql = "UPDATE usuarios SET tipo='$this->tipo', nick='$this->nick', email='$this->email', telefono='$this->telefono', nombre='$this->nombre', apellidos='$this->apellidos', edad='$this->edad' WHERE id='$this->id'";
 			}else{
 				$sql = "UPDATE usuarios SET tipo='$this->tipo', nick='$this->nick',  contraseña='".encripta($this->contraseña,"encriptando")."', email='$this->email', telefono='$this->telefono', nombre='$this->nombre', apellidos='$this->apellidos', edad='$this->edad' WHERE id='$this->id'";
-			
 			}
 			$conexion->query($sql);
 			Conexion::desconectarBD($conexion);

@@ -53,7 +53,6 @@ $(function() {
                         if ($(this).attr("name") == motivos[i]) {
                             $(this).attr("checked","checked");
                         }
-                        
                     }
                 });
             }
@@ -61,7 +60,7 @@ $(function() {
     }else{
         alert("Es posible que esta página no funcione correctamente en cuanto a aspectos visuales");
     }
-    //si hago click fuera de #modificaciones
+    //si hago click fuera de section
     $(document).on('touchstart click',function (e){
         var container = $("section");
         if (!container.is(e.target) && $(e.target).closest(container).length == 0) {
@@ -72,11 +71,7 @@ $(function() {
                 url: window.location.pathname + parametrosURL[0],
                 type: 'POST',
                 dataType: 'html',
-                data: {condicion: "borrarSesionesPagina"},
-                //no uso el success
-                success:function(resultado){
-                    //alert("Página eliminada");//poner para que ponga el nick de usuario
-                }
+                data: {condicion: "borrarSesionesPagina"}
             })
         }
     });
@@ -95,7 +90,7 @@ $(function() {
     $("#datepicker").datepicker({
         onSelect: function(dateText, inst) {
             var fechaCorrecta = true;
-            var fecha = $(this).datepicker( 'getDate' ); //coge fecha usando objeto date
+            var fecha = $(this).datepicker( 'getDate' );//coge fecha usando objeto Date
             var fechaActual = new Date();
             if (fecha.getFullYear()<fechaActual.getFullYear()) {
                 fechaCorrecta = false;
@@ -114,15 +109,11 @@ $(function() {
                 var cadenaFecha = fecha.getFullYear() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getDate();
                 //quitar ajax, no necesario, solo la redireccion
                 $.ajax({
-                    // aqui va la ubicación de la página PHP
                     url: window.location.pathname + parametrosURL[0],
                     type: 'POST',
                     dataType: 'html',
-                    //data: diasSemana[fecha.getDay()],
                     data: { condicion: "datosDia", date: cadenaFecha},
                     success:function(resultado){
-                        // imprime "resultado Funcion"
-                        //console.log(resultado);
                         $(location).attr('href', window.location.pathname + parametrosURL[0] + '&d=' + diasSemana[fecha.getDay()]);
                     }
                 })
@@ -132,6 +123,7 @@ $(function() {
             } 
         }
     });
+    //validaciones
     if ($("input[type=checkbox]")) {
         $("select").attr("disabled","disabled");
         $("input[type='submit']").attr("disabled","disabled");
@@ -164,15 +156,11 @@ $(function() {
         //padStart es una funcion que uso para añadir 0 a la izquierda siempre y cuando no tenga ya 2 caracteres númericos
         tiempo = horas.toString().padStart(2,"0") + ":" + minutos.toString().padStart(2,"0");
         $.ajax({
-            // aqui va la ubicación de la página PHP
             url: window.location.pathname + parametrosURL[0],
             type: 'POST',
             dataType: 'html',
-            //data: diasSemana[fecha.getDay()],
             data: { tiempoNecesario: tiempo},
             success:function(resultado){
-                // imprime "resultado Funcion"
-                //console.log(resultado);
                 $(location).attr('href', window.location.pathname + parametrosURL[0] + "&" + parametrosURL[1]);
              }
          })

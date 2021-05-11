@@ -8,7 +8,6 @@ Class Horario{
     private $viernes;
     private $sabado;
     private $domingo;
-    //poner usuario de visitante como base
     function __construct($tipo_usr="Cliente",$lunes=array(),$martes=array(),$miercoles=array(),$jueves=array(),$viernes=array(),$sabado=array(),$domingo=array()){
 		$this->tipo_usr = $tipo_usr;
 		$this->lunes = $lunes;
@@ -51,7 +50,7 @@ Class Horario{
             }
         }
         while ($fila = $result->fetch_assoc()) {
-            //los añado al objeto
+            //los añado al objeto según el dia al que pertenezca el registro
             switch ($fila['dia']) {
                 case "Lunes":
                     $this->lunes = $fila;
@@ -76,7 +75,7 @@ Class Horario{
                     break;
             }
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $creado;
     }

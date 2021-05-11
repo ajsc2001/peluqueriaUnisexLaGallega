@@ -8,7 +8,7 @@ function datosDia($diaSemana){
 ?>
 <section>
     <article>
-        <div id="datepicker"></div><!--$( ".selector" ).datepicker( "getDate" );      coge fecha-->
+        <div id="datepicker"></div>
     </article>
     <article id='verde'>
         <h1>Horario</h1>
@@ -17,7 +17,7 @@ function datosDia($diaSemana){
             if (isset($_GET['d'])) {
                 $dia = $_GET['d'];
             }else{
-                $dia = date("l");
+                $dia = date("l");//cojo el nombre del dia actual
                 switch ($dia) {
                     case "Sunday":
                         $dia = "Domingo";
@@ -42,7 +42,7 @@ function datosDia($diaSemana){
                         break;
                 }
             }
-            $dia = datosDia($dia);
+            $dia = datosDia($dia);//Cojo los datos del horario para ese
             if ($dia) {
                 echo "<p id='fecha'>".$dia['dia']."</p>";
                 if ($dia['cerrado']) {

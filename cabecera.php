@@ -25,18 +25,27 @@ if (isset($_GET['p'])&&($_GET['p']=="horario"||$_GET['p']=="citas")) {
     <script src="js/calendario.js"></script>
     <?php
 }
+if (isset($_GET['p'])&&$_GET['p']=="crearUsuario") {
+    ?>
+    <!--Mis archivos-->
+    <script src="js/crearUsuario.js"></script>
+    <?php
+}
 if (isset($_GET['p'])&&$_GET['p']=="cuenta") {
     ?>
+    <!--Mis archivos-->
     <script src="js/eliminarUsuario.js"></script>
     <?php
 }
 if (isset($_GET['p'])&&$_GET['p']=="reservas") {
     ?>
+    <!--Mis archivos-->
     <script src="js/reservas.js"></script>
     <?php
 }
 if (isset($_GET['p'])&&$_GET['p']=="administracion") {
     ?>
+    <!--Mis archivos-->
     <script src="js/administracion.js"></script>
     <?php
 }
@@ -53,12 +62,12 @@ if (isset($_GET['p'])&&$_GET['p']=="administracion") {
         <!--MENU-->
         <nav class="navbar navbar-expand-sm navbar-light margenes-menu">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.php"><img class="logo" src="img/logo.png" alt="LOGO"></a><!--poner clase logo en el 'a'-->
+                <a class="navbar-brand" href="index.php"><img class="logo" src="img/logo.png" alt="LOGO"></a>
                 <button class="navbar-toggler btn btn-outline-danger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div id="navbarNavDropdown" class="collapse navbar-collapse text-danger derecha">
-                    <ul class="navbar-nav"><!--mirar como ahcer para ponerlo todo dentro de un if (solo falta una comilla que hay por en medio)-->
+                    <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link text-danger<?php if (!isset($_GET['p'])) {echo " active";} ?>" <?php if (!isset($_GET['p'])) {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>">Inicio</a>
                         </li>

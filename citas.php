@@ -3,6 +3,11 @@ require "class/servicio.php";
 require "class/horario.php";
 require "class/cita.php";
 require "class/usuario.php";
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////AJAX////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 function datosDia($diaSemana){
     $horario = new Horario($_SESSION['tipo']);
     $dia = $horario->obtenerDia($diaSemana);
@@ -27,6 +32,11 @@ function eliminarSesionesPagina(){
 if (isset($_REQUEST['condicion'])&&$_REQUEST['condicion']=="borrarSesionesPagina") {
     echo eliminarSesionesPagina();
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////CITAS////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_POST['reservar'])) {
     function validarDatos($datos){
         if (!isset($datos['motivos'])) {
@@ -37,7 +47,6 @@ if (isset($_POST['reservar'])) {
         }
         return "";
     }
-    //falta que si error que se mantengan los datos
     $motivos = array();
     $fecha = "";
     $msg = validarDatos($_POST);
@@ -48,7 +57,6 @@ if (isset($_POST['reservar'])) {
         </div>
         <?php
     }else{
-        //si no hay error
         function cadenaMotivos($motivos){
             $cadena = "";
             foreach($motivos as $key => $value){
@@ -64,8 +72,7 @@ if (isset($_POST['reservar'])) {
         $motivos = $_POST['motivos'];
         $fecha = $_POST['fecha'];
         //nueva cita
-        //no hago implode por que quiero quedarme con las keys del array
-        $cita = new Cita($_SESSION['tipo'],"",cadenaMotivos($motivos),$fecha,$_SESSION['tiempoNecesario'],$_SESSION['id']);
+        $cita = new Cita($_SESSION['tipo'],"",cadenaMotivos($motivos),$fecha,$_SESSION['tiempoNecesario'],$_SESSION['id']);//no hago implode de $motivos por que quiero quedarme con las keys del array
         if ($cita->crearCita()) {
             ?>
             <div class="alert alert-success centrarAlert" role="alert">
@@ -87,11 +94,11 @@ if (isset($_POST['reservar'])) {
             $email = $usuario->get_email();
             //correo
             $to=$email;
-            $asunto = "Reserva de $nombre";//modificar asunto
+            $asunto = "Reserva de $nombre $apellidos";//modificar asunto
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= "From: Peluquería Unisex 'La Gallega'<support@peluqueriaunisexlagallega.com>" . "\r\n";
-            //$headers .= "Cc: support@peluqueriaunisexlagallega.com" . "\r\n";
+            $headers .= "Cc: support@peluqueriaunisexlagallega.com" . "\r\n";
             $contenido = "
                 <section>
                     <p>Sr./Sra. <strong>$nombre</strong>,</p>
@@ -107,14 +114,14 @@ if (isset($_POST['reservar'])) {
                 <div class="alert alert-success centrarAlert" role="alert">
                     El correo ha sido enviado correctamente. Si usted no recibe una copia en los proximos 5 minutos vuelva a escribirnos o pongase en contacto con nosotros por otra via.
                 </div>
-            <?php
+                <?php
             }else{
                 //el correo no se ha podido enviar
-            ?>
-            <div class="alert alert-danger centrarAlert" role="alert">
-                El correo no ha sido enviado. Ha ocurrido un error. Vuelva a intentarlo o pongase en contacto con nosotros por otra via.
-            </div>
-            <?php
+                ?>
+                <div class="alert alert-danger centrarAlert" role="alert">
+                    El correo no ha sido enviado. Ha ocurrido un error. Vuelva a intentarlo o pongase en contacto con nosotros por otra via.
+                </div>
+                <?php
             }
         }else{
             ?>
@@ -138,7 +145,7 @@ if (isset($_POST['reservar'])) {
         if (isset($_GET['d'])) {
             $dia = $_GET['d'];
         }else{
-            $dia = date("l");
+            $dia = date("l");//cojo el nombre del dia actual
             switch ($dia) {
                 case "Sunday":
                     $dia = "Domingo";
@@ -163,7 +170,7 @@ if (isset($_POST['reservar'])) {
                     break;
             }
         }
-        $dia = datosDia($dia);
+        $dia = datosDia($dia);//cojo datos relacionados a ese dia del horario
         if ($dia) {
             echo "<p id='fecha'>".$dia['dia']."</p>";
             if ($dia['cerrado']) {
@@ -231,7 +238,7 @@ if (isset($_POST['reservar'])) {
                                             //cojo las horas y minutos finales
                                             $hora = intval(substr($value,-8,-3));
                                             $minutos = intval(substr($value,-5,-3));
-                                            //cojo las horas y minutos finales
+                                            //cojo las horas y minutos de cierre
                                             $horaFin = intval(substr($dia['cierreMañana'],0,-6));
                                             $minutosFin = intval(substr($dia['cierreMañana'],3,-3));
                                             if ($hora<$horaFin) {
@@ -428,20 +435,11 @@ if (isset($_POST['reservar'])) {
                                 <option value=""></option>
                                 <?php
                                 foreach ($horas as $hora){
-                                    echo "<option value='$hora'";
-                                    /*if ($hora==substr($value2, 0, -3)) {
-                                        echo "selected='selected'";
-                                    }*/
-                                    echo ">$hora</option>";
+                                    echo "<option value='$hora'>$hora</option>";
                                 }
                                 ?>
                             </select>
                             <?php
-                            /*if ($_SESSION['tipo']!="Cliente") {
-                                ?>
-                                <td><?php echo $value2 ?></td>
-                                <?php
-                            }*/
                             ?>
                             <input type="submit" name="reservar" value="Reservar">
                         </form>

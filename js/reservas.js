@@ -9,6 +9,7 @@ $(function (){
     } else {
         alert("Es posible que algo de esta página no funcione correctamente por la incompatibilidad con el objeto Storage");
     }
+    //actualizo la paginacion
     $(".page-link").click(function(){
         if ($(this).text()=="Anteriores") {
             pagina--;
@@ -19,18 +20,13 @@ $(function (){
         }
         sessionStorage.setItem("paginaActual",pagina);
         $.ajax({
-            // aqui va la ubicación de la página PHP
             url: window.location.pathname + "?p=reservas",
             type: 'POST',
             dataType: 'html',
-            data: {paginaActual: pagina},
-            success:function(resultado){
-                //alert("Página actual: " + pagina);//poner para que ponga el nick de usuario
-            }
+            data: {paginaActual: pagina}
         })
         //redirijo a la misma url para poder ver las cookies
         $(location).attr('href', window.location.href);
-        //$(location).attr('href', window.location.href);//a veces con 1 va, otras le hace falta 2
     });
     //si hago click fuera de #modificaciones
     $(document).on('touchstart click',function (e){
@@ -42,11 +38,7 @@ $(function (){
                 url: window.location.pathname + "?p=reservas",
                 type: 'POST',
                 dataType: 'html',
-                data: {condicion: "eliminarPaginaActual"},
-                //no uso el success
-                success:function(resultado){
-                    //alert("Página eliminada");//poner para que ponga el nick de usuario
-                }
+                data: {condicion: "eliminarPaginaActual"}
             })
         }
       });
@@ -55,7 +47,6 @@ $(function (){
         var respuesta = confirm("¿Seguro que quiere eliminar la reserva nº" + id_reserva + "?");
         if (respuesta) {
             $.ajax({
-                // aqui va la ubicación de la página PHP
                 url: window.location.pathname + "?p=reservas",
                 type: 'POST',
                 dataType: 'html',

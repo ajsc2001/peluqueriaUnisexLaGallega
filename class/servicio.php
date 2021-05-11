@@ -4,7 +4,6 @@ Class Servicio{
     private $id;
 	private $nombre;
 	private $tiempo;
-    //poner usuario de visitante como base
     function __construct($tipo_usr="Cliente",$id="",$nombre="",$tiempo=""){
 		$this->tipo_usr = $tipo_usr;
 		$this->id = $id;
@@ -18,11 +17,10 @@ Class Servicio{
         $result = $conexion->query($sql);
         if (!$result->num_rows<1) {
             while ($fila = $result->fetch_assoc()) {
-                //los añado al array de objetos
                 array_push($servicios,$fila);
             };
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $servicios;
     }
@@ -33,11 +31,10 @@ Class Servicio{
         $result = $conexion->query($sql);
         if (!$result->num_rows<1) {
             while ($fila = $result->fetch_assoc()) {
-                //los añado al objeto
                 array_push($servicios,$fila);
             };
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $servicios;
     }
@@ -52,7 +49,7 @@ Class Servicio{
                 array_push($servicios,$fila);
             }
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
         return $servicios;
     }
@@ -65,8 +62,7 @@ Class Servicio{
                 return true;
             }else{
                 $fila = $result->fetch_assoc();
-                //si la fila tiene mi id entonces actualizo igualmente
-				if ($fila['id']==$this->id) {
+				if ($fila['id']==$this->id) {//si la fila tiene mi id entonces actualizo igualmente
 					$this->modificarDatos();
 					return true;
 				}else{
@@ -74,7 +70,7 @@ Class Servicio{
 				}
             }
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
     }
     function modificarDatos(){
@@ -94,7 +90,7 @@ Class Servicio{
                 return false;
             }
         }
-        $result->free();//no se si hay que ponerlo
+        $result->free();
         Conexion::desconectarBD($conexion);
     }
     function añadirServicio(){

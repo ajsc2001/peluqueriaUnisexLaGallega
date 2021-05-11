@@ -36,14 +36,6 @@ if (isset($_POST['enviar'])) {
         </div>
         <?php
     }else{
-        function url_actual(){
-            if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
-                $url = "https://";
-            }else{
-                $url = "http://";
-            }
-            return $url.$_SERVER['HTTP_HOST'];
-        }
         //correo
         $to=$email;
         $asunto = "Consulta de $nombre";//modificar asunto
@@ -57,23 +49,23 @@ if (isset($_POST['enviar'])) {
                 <p>Esta es su consulta:</p>
                 <p><strong>$mensaje</strong></p>
                 <p>Gracias por contactar con nosotros. En breve recibirá una respuesta a su consulta.</p>
-                <img src='".url_actual()."/img/logo.png' alt='LOGO' width='10%'>
+                <img src='".url_actual("correo")."/img/logo.png' alt='LOGO' width='10%'>
             </section>";
         //enviar correo
         if (mail($to,$asunto,$contenido,$headers)) {
             //correo enviado corectamente
             ?>
             <div class="alert alert-success centrarAlert" role="alert">
-                El correo ha sido enviado correctamente. Si usted no recibe una copia en los proximos 5 minutos vuelva a escribirnos o pongase en contacto con nosotros por otra via.
+                El correo ha sido enviado correctamente. Si usted no recibe una copia en los proximos 5 minutos vuelva a escribirnos o pongase en contacto con nosotros por otra vía.
             </div>
         <?php
         }else{
             //el correo no se ha podido enviar
-        ?>
-        <div class="alert alert-danger centrarAlert" role="alert">
-            El correo no ha sido enviado. Ha ocurrido un error. Vuelva a intentarlo o pongase en contacto con nosotros por otra via.
-        </div>
-        <?php
+            ?>
+            <div class="alert alert-danger centrarAlert" role="alert">
+                El correo no ha sido enviado. Ha ocurrido un error. Vuelva a intentarlo o pongase en contacto con nosotros por otra via.
+            </div>
+            <?php
         }
     }
 }
@@ -84,7 +76,7 @@ if (isset($_POST['enviar'])) {
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto" method="POST">
             <p>Nombre: <input type="text" name="nombreCompleto" value="<?php echo $nombre.' '.$apellidos ?>"></p>
             <p>E-mail: <input type="email" name="email" value="<?php echo $email ?>"></p>
-            <p>Explique el motivo de la consulta:</p>
+            <p>Explique el motivo de su consulta:</p>
             <textarea name="mensaje" cols="30" rows="10"><?php echo $mensaje ?></textarea>
             <input type="submit" name="enviar" value="Enviar">
         </form>

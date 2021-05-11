@@ -3,7 +3,7 @@
     ob_start();
     if (!isset($_SESSION["tipo"])) {
         $_SESSION["tipo"] = "Cliente";
-    }//poner else con los demas tipos de usuario
+    }
     require "lib/conexion.php";
     require "cabecera.php";
 ?>
@@ -43,7 +43,7 @@
                 if (!isset($_SESSION['id'])) {
                     header("Location: index.php?p=login");
                 }else{
-                    //elimino todas las variables de sesion y creo unicamente el tipo
+                    //elimino todas las variables de sesion y creo unicamente el tipo al redirigir al index.php
                     session_unset();
 				    header("Location: index.php");
                 }

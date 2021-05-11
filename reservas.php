@@ -1,19 +1,11 @@
 <?php
 require "class/cita.php";
 require "class/usuario.php";
-
-
-
-/*if(isset($_REQUEST["reserva"])){
-    //require "class/cita.php";
-    echo require "lib/generarPDF.php";
-    echo $id_reserva = $_REQUEST["reserva"];
-    //echo array_push($_POST,"servicios"=>"");
-    exit();
-}*/
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////AJAX////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //eliminar un servicio
 function eliminarCita($id){
     $cita = new Cita($_SESSION['tipo'],$id);
@@ -22,7 +14,6 @@ function eliminarCita($id){
 if(isset($_REQUEST["reserva"])){
     //require "class/cita.php";
     echo eliminarCita($_REQUEST["reserva"]);
-    //echo array_push($_POST,"servicios"=>"");
     exit();
 }
 //eliminar la página actual en la que esto (paginación)
@@ -35,6 +26,11 @@ if (isset($_REQUEST['condicion'])&&$_REQUEST['condicion']=="eliminarPaginaActual
     //elimino la sesion de la pagina actual
     echo eliminarPaginaActual();
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////RESERVAS//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //paginacion
 $cuantos = 10;
 if(isset($_REQUEST["paginaActual"])){
@@ -48,8 +44,6 @@ if(isset($_REQUEST["paginaActual"])){
     <?php
     $cita = new Cita($_SESSION['tipo']);
     //paginación
-    $total = count($cita->obtenerCitas());
-    $paginas = ceil($total/$cuantos);
     if (isset($_SESSION['paginaActual'])) {
         $inicio = $_SESSION['paginaActual'] * $cuantos - $cuantos;
     }else{
@@ -59,6 +53,8 @@ if(isset($_REQUEST["paginaActual"])){
             $inicio = 0;
         }
     }
+    $total = count($cita->obtenerCitasPaginacion($inicio,$cuantos));
+    $paginas = ceil($total/$cuantos);
     if (!$cita->obtenerCitasPaginacion($inicio,$cuantos)) {
         ?>
         <div class="alert alert-warning centrarAlert" role="alert">
@@ -79,6 +75,7 @@ if(isset($_REQUEST["paginaActual"])){
     }else{
         $citas = $cita->obtenerCitasPaginacion($inicio,$cuantos);
     }
+    if (count($citas)) {
     ?>
     <table class="table table-hover">
         <thead>
@@ -98,7 +95,6 @@ if(isset($_REQUEST["paginaActual"])){
         </thead>
         <tbody>
     <?php
-    if (count($citas)) {
         foreach ($citas as $key => $value) {
             ?>
             <tr>
@@ -108,7 +104,15 @@ if(isset($_REQUEST["paginaActual"])){
                     ?>
                     <td><?php echo substr($value2,0,-3) ?></td>
                     <?php
-                }else if ($key2!="id_usuario") {
+                }else if($key2=="id_usuario"){
+                    $usuario = new Usuario($value2,$_SESSION['tipo']);
+                    $usuario->recuperarDatos();
+                    $nombre = $usuario->get_nombre();
+                    $apellidos = $usuario->get_apellidos();
+                    ?>
+                    <td><?php echo "$nombre $apellidos" ?></td>
+                    <?php
+                }else{
                     ?>
                     <td><?php echo $value2 ?></td>
                     <?php

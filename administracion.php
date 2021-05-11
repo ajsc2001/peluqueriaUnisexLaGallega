@@ -15,7 +15,6 @@ function eliminarUsuario($id){
 if(isset($_REQUEST["usuario"])){
     require "class/usuario.php";
     echo eliminarUsuario($_REQUEST["usuario"]);
-    //echo array_push($_POST,"usuarios"=>"");
     exit();
 }
 //eliminar un servicio
@@ -26,7 +25,6 @@ function eliminarServicio($id){
 if(isset($_REQUEST["servicio"])){
     require "class/servicio.php";
     echo eliminarServicio($_REQUEST["servicio"]);
-    //echo array_push($_POST,"servicios"=>"");
     exit();
 }
 //eliminar la página actual en la que esto (paginación)
@@ -166,7 +164,7 @@ if (isset($_POST['usuarios'])||isset($_POST['modificarUsuarios'])||isset($_GET['
             </thead>
             <tbody>
             <?php
-            if (/*$usuario->obtenerUsuarios()*/count($usuarios)) {
+            if (count($usuarios)) {
                 foreach ($usuarios as $key => $value) {
                     ?>
                     <tr>
@@ -285,7 +283,6 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
                 if (empty($dato)) {
                     return false;
                 }
-
             }
             return true;
         }
@@ -322,7 +319,7 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
             }else{
                 $err = false;
                 $msg = "";
-                if ($servicio->obtenerServiciosPaginacion($inicio,$cuantos)) {//paginados????
+                if ($servicio->obtenerServiciosPaginacion($inicio,$cuantos)) {
                     $msg .= "Los datos de servicios anteriores han sido actualizados";
                     //modifico los ya existentes
                     for ($i=0; $i < count($servicios); $i++) { 
@@ -434,7 +431,7 @@ if (isset($_POST['servicios'])||isset($_POST['añadirYModificarServicios'])||iss
             </thead>
             <tbody>
             <?php
-            if (/*$servicio->obtenerServicios()*/count($servicios)) {
+            if (count($servicios)) {
                 foreach ($servicios as $key => $value) {
                     ?>
                     <tr>

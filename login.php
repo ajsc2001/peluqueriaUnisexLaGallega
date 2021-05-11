@@ -15,7 +15,7 @@ require "class/usuario.php";
 			$usuario = new Usuario("",$_SESSION["tipo"],$nick,$contraseña);
 			if ($usuario->existe()) {
                 $usuario->login();
-                //crear sesion del objeto
+                //crear variables sesion
 				$_SESSION["id"] = $usuario->get_id();
 				$_SESSION["tipo"] = $usuario->get_tipo();
 				$_SESSION["nombre"] = $usuario->get_nombre();

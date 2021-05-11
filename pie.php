@@ -5,16 +5,17 @@
                 <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="horario") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="horario") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=horario">Horario</a>
                 <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="citas") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="citas") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=citas">Citas</a>
                 <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="contacto") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="contacto") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">Contacto</a>
-            </nav>
-            <nav class="nav flex-column">
                 <?php
                 if (!isset($_SESSION["nombre"])) {
                     ?>
                     <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="login") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=login">Iniciar sesión</a>
+            </nav>
                     <?php
                 }else{
                     if (isset($_SESSION['tipo'])&&$_SESSION['tipo']=="Administrador") {
                         ?>
+            </nav>
+            <nav class="nav flex-column">
                         <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="administracion") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="administracion") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=administracion">Administración</a>
                         <?php
                     }
@@ -36,7 +37,6 @@
             <a href="https://instagram.com/peluqueria_lagallega"><img src="img/instagram-logo.png" alt="Instagram"></a>
         </section>
     </footer>
-    <!--poner por alguna parte algo de copyright-->
 </body>
 
 </html>

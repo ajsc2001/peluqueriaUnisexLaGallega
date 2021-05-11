@@ -4,14 +4,12 @@ $(function() {
         var respuesta = confirm("¿Seguro que quiere eliminar este usuario?");
         if (respuesta) {
             $.ajax({
-                // aqui va la ubicación de la página PHP
                 url: window.location.pathname + "?p=cuenta",
                 type: 'POST',
                 dataType: 'html',
                 data: { condicion: "eliminarUsuario"},
                 success:function(resultado){
-                    // imprime "resultado Funcion"
-                    alert("El usuario " + nick + " ha sido eliminado");//poner para que ponga el nick de usuario
+                    alert("El usuario " + nick + " ha sido eliminado");
                     $(location).attr('href', window.location.pathname);
                 }
             })
