@@ -40,7 +40,7 @@ if(isset($_REQUEST["paginaActual"])){
 ?>
 <h1>Mis reservas:</h1>
 <section id="reservas">
-<article class="table-responsive">
+<article>
     <?php
     $cita = new Cita($_SESSION['tipo']);
     //paginación
@@ -77,6 +77,7 @@ if(isset($_REQUEST["paginaActual"])){
     }
     if (count($citas)) {
     ?>
+<div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -135,6 +136,7 @@ if(isset($_REQUEST["paginaActual"])){
     ?>
         </tbody>
     </table>
+</div>
     <?php
     //paginación
     if ($paginas>0) {

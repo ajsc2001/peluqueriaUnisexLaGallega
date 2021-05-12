@@ -89,6 +89,7 @@ $(function(){
             }else if ($(this).attr("name")=="contraseña"||$(this).attr("name")=="contraseña2") {
                 validarContraseña($(this));
             }
+            $("input[type='submit']").attr("disabled","disabled");
             if ($("input[name='nombre']").val().length>=1&&$("input[name='apellidos']").val().length>=1&&$("input[name='edad']").val().length>=1&&$("input[name='email']").val().length>=1&&$("input[name='telefono']").val().length>=1&&$("input[name='nick']").val().length>=1&&$("input[name='contraseña']").val().length>=1&&$("input[name='contraseña2']").val().length>=1) {
                 if ($("input[type='submit']").attr("disabled")) {
                     $("input[type='submit']").removeAttr("disabled");

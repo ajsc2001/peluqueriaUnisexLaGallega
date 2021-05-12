@@ -71,7 +71,7 @@ if (isset($_POST['enviar'])) {
 }
 ?>
 <h1>Contacto:</h1>
-<section>
+<section id="contacto">
     <article id='verde'>
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto" method="POST">
             <p>Nombre: <input type="text" name="nombreCompleto" value="<?php echo $nombre.' '.$apellidos ?>"></p>

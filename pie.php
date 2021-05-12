@@ -1,5 +1,5 @@
     <footer class=".container-fluid bg-dark">
-        <div id="menus">
+        <section id="menus">
             <nav class="nav flex-column">
                 <a class="nav-link<?php if (!isset($_GET['p'])) {echo " active";} ?>" <?php if (!isset($_GET['p'])) {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>">Inicio</a>
                 <a class="nav-link<?php if (isset($_GET['p'])&&$_GET['p']=="horario") {echo " active";} ?>" <?php if (isset($_GET['p'])&&$_GET['p']=="horario") {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>?p=horario">Horario</a>
@@ -27,7 +27,7 @@
                 }
                 ?>
             </nav>
-        </div>
+        </section>
         <section class="logo">
             <img src="img/logo.png" alt="LOGO">
         </section>

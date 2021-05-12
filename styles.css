@@ -7,7 +7,6 @@ p{/*no se si a esto tendré que cambiarle el selector para el resto de páginas*
 }
 header nav, .dropdown-menu[data-bs-popper]{
     background-color:lightgreen;
-    font-size:1.5vw;
 }
 .navbar{
     padding:0;
@@ -18,6 +17,9 @@ header nav, .dropdown-menu[data-bs-popper]{
 }
 .active{
     font-weight:bold;
+}
+ul li .active:hover, ul li .active:active{
+    color:#dc3545!important;
 }
 header .logo{
     /*max-width:10rem;*/
@@ -33,9 +35,6 @@ footer .logo{
 }
 .nav-item{
     padding:0.5rem;
-}
-.nav-link{
-    padding:1rem 0;
 }
 .nav-link:hover, .dropdown-item:hover{
     background-color: tomato;
@@ -82,6 +81,12 @@ article{
 article img{
     border-radius:5vw;
 }
+.altura{
+    height:10rem;
+}
+#contacto #verde{
+    min-width:90%;
+}
 #verde{
     background-color:lightgreen;
     border:solid 2px black;
@@ -90,13 +95,6 @@ article img{
     margin-top:0;
     margin-bottom:0.5rem;
 }
-/*intento de adaptar todos los form*/
-/*#verde form{
-    width:80%;
-}
-#verde form input:not(input[type="submit"]){
-    width:50%;
-}*/
 form{
     min-width:40%;
     display:flex;
@@ -158,20 +156,18 @@ textarea{
     min-width:100%;
     height:100%;
 }
-footer{
-    padding:0.5rem;
-    color:lightgreen;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
 #modificaciones form{
     display:flex;
     align-items:center;
 }
 table{
     text-align: center;
-    /*max-width:95%;*/
+}
+/*#modificaciones table{
+    max-width:10%;
+}*/
+#reservas article{
+    display:inline;
 }
 #fecha{
     text-align:center;
@@ -183,19 +179,29 @@ table{
     font-weight:bold;
     font-size:3rem;
 }
+footer{
+    padding:0.5rem;
+    color:lightgreen;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+footer > section:nth-child(1n){
+    margin:1rem;
+}
 #menus{
     display:flex;
+    flex-direction:row;
     justify-content:space-between;
 }
-
-
-
-
-
-
-footer section{
-    margin:0!important;
+#menus nav:nth-child(1){
+    margin-right:2rem;
 }
+
+
+
+
+
 
 
 
@@ -215,14 +221,28 @@ footer nav a{
     max-width:3rem;
 }
 @media (min-width:576px){
+    header nav, .dropdown-menu[data-bs-popper]{
+        font-size:2vw;
+    }
+    .nav-link{
+        padding:1rem 0;
+    }
     section{
         flex-direction:row;
         flex-wrap:wrap;
         justify-content:space-around;
         align-items:stretch;
     }
-    article{
+    
+    #contacto #verde{
+        min-width:auto;
+    }
+    article,#contacto #verde{
         width:45%;
+    }
+    
+    .altura{
+        height:15rem;
     }
     #horario p{
         width:50%;
@@ -252,6 +272,9 @@ footer nav a{
     }
 }
 @media (min-width:768px){
+    header nav, .dropdown-menu[data-bs-popper]{
+        font-size:1.5vw;
+    }
     #carouselExampleSlidesOnly img{
         height:25rem;/**/
     }
@@ -260,5 +283,13 @@ footer nav a{
 @media (min-width:992px){
     #horario p{
         max-width:35%;
+    }
+}
+@media (min-width:1024px){
+    .altura{
+        height:20rem;
+    }
+    #carouselExampleSlidesOnly img{
+        height:35rem;/**/
     }
 }
