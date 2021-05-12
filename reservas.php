@@ -105,13 +105,16 @@ if(isset($_REQUEST["paginaActual"])){
                     <td><?php echo substr($value2,0,-3) ?></td>
                     <?php
                 }else if($key2=="id_usuario"){
-                    $usuario = new Usuario($value2,$_SESSION['tipo']);
-                    $usuario->recuperarDatos();
-                    $nombre = $usuario->get_nombre();
-                    $apellidos = $usuario->get_apellidos();
-                    ?>
-                    <td><?php echo "$nombre $apellidos" ?></td>
-                    <?php
+                    if (isset($_SESSION['tipo'])&&$_SESSION['tipo']!="Cliente") {
+                        $usuario = new Usuario($value2,$_SESSION['tipo']);
+                        $usuario->recuperarDatos();
+                        $nombre = $usuario->get_nombre();
+                        $apellidos = $usuario->get_apellidos();
+                        ?>
+                        <td><?php echo "$nombre $apellidos" ?></td>
+                        <?php
+                    }
+                    
                 }else{
                     ?>
                     <td><?php echo $value2 ?></td>

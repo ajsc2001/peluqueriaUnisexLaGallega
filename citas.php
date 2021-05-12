@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION['id'])) {
+    header("Location: index.php?p=login");
+}
 require "class/servicio.php";
 require "class/horario.php";
 require "class/cita.php";
@@ -57,11 +60,18 @@ if (isset($_POST['reservar'])) {
         </div>
         <?php
     }else{
+        function ultimo_key($motivos){
+            $keys = array();
+            foreach($motivos as $key => $value){
+                array_push($keys,$key);
+            }
+            return $keys[count($keys) - 1];
+        }
         function cadenaMotivos($motivos){
             $cadena = "";
             foreach($motivos as $key => $value){
                 //con esta funcion se cual es el último key del array
-                if ($key !== array_key_last($motivos)) {
+                if ($key !== ultimo_key($motivos)) {
                     $cadena .= "$key, ";
                 }else{
                     $cadena .= "$key.";
@@ -79,14 +89,6 @@ if (isset($_POST['reservar'])) {
                 La reserva de su cita ha sido exitosa.
             </div>
             <?php
-            function url_actual(){
-                if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
-                    $url = "https://";
-                }else{
-                    $url = "http://";
-                }
-                return $url.$_SERVER['HTTP_HOST'];
-            }
             $usuario = new Usuario($_SESSION["id"],$_SESSION['tipo']);
             $usuario->recuperarDatos();
             $nombre = $usuario->get_nombre();
@@ -103,9 +105,9 @@ if (isset($_POST['reservar'])) {
                 <section>
                     <p>Sr./Sra. <strong>$nombre</strong>,</p>
                     <p>Su reserva ha sido exitosa.</p>
-                    <p>Esta planificada para la siguiente fecha: <strong>".substr($fecha,0,-3)."</strong></p>
+                    <p>Esta planificada para la siguiente fecha: <strong>$fecha</strong></p>
                     <p>Gracias por contar con nosotros.</p>
-                    <img src='".url_actual()."/img/logo.png' alt='LOGO' width='10%'>
+                    <img src='".url_actual("correo")."/img/logo.png' alt='LOGO' width='10%'>
                 </section>";
             //enviar correo
             if (mail($to,$asunto,$contenido,$headers)) {
