@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 12-05-2021 a las 22:56:45
+-- Tiempo de generación: 14-05-2021 a las 00:57:35
 -- Versión del servidor: 10.4.17-MariaDB
 -- Versión de PHP: 8.0.2
 
@@ -35,14 +35,6 @@ CREATE TABLE `citas` (
   `id_usuario` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `citas`
---
-
-INSERT INTO `citas` (`id`, `motivos`, `fecha`, `tiempo`, `id_usuario`) VALUES
-(34, '123.', '2021-05-12 08:00:00', '00:45:00', 20),
-(35, '123.', '2021-05-13 08:00:00', '00:45:00', 41);
-
 -- --------------------------------------------------------
 
 --
@@ -58,19 +50,6 @@ CREATE TABLE `horario` (
   `cerrado` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `horario`
---
-
-INSERT INTO `horario` (`dia`, `aperturaMañana`, `cierreMañana`, `aperturaTarde`, `cierreTarde`, `cerrado`) VALUES
-('Domingo', '10:00:00', '13:30:00', '16:00:00', '21:00:00', 1),
-('Jueves', '08:00:00', '08:00:00', '08:00:00', '08:00:00', 0),
-('Lunes', '08:00:00', '08:00:00', '08:00:00', '08:00:00', 1),
-('Martes', '08:00:00', '08:00:00', '08:00:00', '08:00:00', 0),
-('Miércoles', '08:00:00', '08:00:00', '08:00:00', '08:00:00', 0),
-('Sábado', '08:00:00', '08:00:00', '08:00:00', '08:00:00', 0),
-('Viernes', '10:00:00', '13:00:00', '16:00:00', '20:00:00', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -82,24 +61,6 @@ CREATE TABLE `servicios` (
   `nombre` varchar(100) NOT NULL,
   `tiempo` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `servicios`
---
-
-INSERT INTO `servicios` (`id`, `nombre`, `tiempo`) VALUES
-(75, '123', '00:45:00'),
-(76, '234', '00:15:00'),
-(77, 'manuek', '00:15:00'),
-(78, 'ert', '01:30:00'),
-(79, 'tyr', '03:30:00'),
-(80, '567', '02:30:00'),
-(81, '5674', '02:30:00'),
-(82, '2344', '02:00:00'),
-(83, '234234234', '02:30:00'),
-(84, '2342', '02:15:00'),
-(85, '2432342', '03:00:00'),
-(86, '2342523', '02:45:00');
 
 -- --------------------------------------------------------
 
@@ -118,14 +79,6 @@ CREATE TABLE `usuarios` (
   `apellidos` varchar(50) NOT NULL,
   `edad` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`id`, `tipo`, `nick`, `contraseña`, `email`, `telefono`, `nombre`, `apellidos`, `edad`) VALUES
-(20, 'Administrador', '123', 'lqCW', 'antoniojose.serna@gmail.com', '622920876', 'Antonio José', 'Serna Cantó', 123),
-(41, 'Cliente', '456', 'maOZ', 'antonio.jose.serna@gmail.com', '622920876', 'Antonio José', 'Serna Can', 456);
 
 --
 -- Índices para tablas volcadas
@@ -167,7 +120,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `citas`
 --
 ALTER TABLE `citas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `servicios`
@@ -179,7 +132,7 @@ ALTER TABLE `servicios`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Restricciones para tablas volcadas
