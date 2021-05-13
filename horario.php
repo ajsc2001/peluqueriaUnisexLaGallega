@@ -44,20 +44,20 @@ function datosDia($diaSemana){
             }
             $dia = datosDia($dia);//Cojo los datos del horario para ese
             if ($dia) {
-                echo "<p id='fecha'>".$dia['dia']."</p>";
+                echo "<p id='fecha'><span>".$dia['dia']."</span></p>";
                 if ($dia['cerrado']) {
                     echo "<p id='cerrado'>CERRADO</p>";
                 }else{
                     ?>
                     <p>Mañana:</p>
-                    <p><?php echo substr($dia['aperturaMañana'],0,-3)." - ".substr($dia['cierreMañana'],0,-3) ?></p>
+                    <p><span><?php echo substr($dia['aperturaMañana'],0,-3)."</span><span> - </span><span>".substr($dia['cierreMañana'],0,-3) ?></span></p>
                     <p>Tarde:</p>
-                    <p><?php echo substr($dia['aperturaTarde'],0,-3)." - ".substr($dia['cierreTarde'],0,-3) ?></p>
+                    <p><span><?php echo substr($dia['aperturaTarde'],0,-3)."</span><span> - </span><span>".substr($dia['cierreTarde'],0,-3) ?></span></p>
                     <?php 
                 }
             }else{
                 ?>
-                <div class="alert alert-info centrarAlert" role="alert">
+                <div class="alert alert-warning centrarAlert" role="alert">
                     No hay ningún horario para el dia seleccionado. Pongase en <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">contacto</a> con nostros para más información
                 </div>
                 <?php

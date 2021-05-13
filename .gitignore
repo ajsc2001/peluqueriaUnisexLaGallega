@@ -1,5 +1,0 @@
-#Esto es un acceso directo para abrir la web desde xampp
-*.url
-#Con esto evitamos la subida de archivos temporales por tener la documentación abierta
-.*
-#Carpetas: nombre/

@@ -141,6 +141,7 @@ if(isset($_REQUEST["paginaActual"])){
     //paginación
     if ($paginas>0) {
         ?>
+        <div id="pagination">
         <nav id="paginacion" aria-label="...">
             <ul class="pagination">
                 <li class="page-item <?php if ($inicio==0) { echo "disabled"; } ?>">
@@ -160,6 +161,7 @@ if(isset($_REQUEST["paginaActual"])){
                 </li>
             </ul>
         </nav>
+        </div>
         <?php
     }
     ?>

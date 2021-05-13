@@ -1,4 +1,4 @@
-    <footer class=".container-fluid bg-dark">
+    <footer class="container-fluid bg-dark">
         <section id="menus">
             <nav class="nav flex-column">
                 <a class="nav-link<?php if (!isset($_GET['p'])) {echo " active";} ?>" <?php if (!isset($_GET['p'])) {echo "aria-current='page'";} ?> href="<?php echo $_SERVER['PHP_SELF'] ?>">Inicio</a>

@@ -49,7 +49,7 @@ if (isset($_POST['enviar'])) {
                 <p>Esta es su consulta:</p>
                 <p><strong>$mensaje</strong></p>
                 <p>Gracias por contactar con nosotros. En breve recibirá una respuesta a su consulta.</p>
-                <img src='".url_actual("correo")."/img/logo.png' alt='LOGO' width='10%'>
+                <img src='".url_actual("correo")."/img/logo.png' alt='LOGO' width='150px'>
             </section>";
         //enviar correo
         if (mail($to,$asunto,$contenido,$headers)) {

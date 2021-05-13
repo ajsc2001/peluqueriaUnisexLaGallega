@@ -107,7 +107,7 @@ if (isset($_POST['reservar'])) {
                     <p>Su reserva ha sido exitosa.</p>
                     <p>Esta planificada para la siguiente fecha: <strong>$fecha</strong></p>
                     <p>Gracias por contar con nosotros.</p>
-                    <img src='".url_actual("correo")."/img/logo.png' alt='LOGO' width='10%'>
+                    <img src='".url_actual("correo")."/img/logo.png' alt='LOGO' width='150px'>
                 </section>";
             //enviar correo
             if (mail($to,$asunto,$contenido,$headers)) {
@@ -451,7 +451,7 @@ if (isset($_POST['reservar'])) {
             }
         }else{
             ?>
-            <div class="alert alert-info centrarAlert" role="alert">
+            <div class="alert alert-warning centrarAlert" role="alert">
                 No hay ningún horario para el dia seleccionado. Pongase en <a href="<?php echo $_SERVER['PHP_SELF'] ?>?p=contacto">contacto</a> con nostros para más información
             </div>
             <?php

@@ -76,7 +76,7 @@ $(function() {
         }
     });
     //añado fecha
-    $("#fecha").append(" <span>(" + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + ")</span>");
+    $("#fecha").append("<span> (" + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + ")</span>");
     //le pongo al select la fecha concatenada con la hora que ya tenia el value por defecto
     if (document.getElementsByTagName("select")) {
         var options = document.getElementsByTagName("option");

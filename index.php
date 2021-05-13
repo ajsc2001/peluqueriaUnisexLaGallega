@@ -7,7 +7,7 @@
     require "lib/conexion.php";
     require "cabecera.php";
 ?>
-    <main class=".container-fluid">
+    <main class="container-fluid">
         <?php
             if (!isset($_GET['p'])) {
                 require "home.php";

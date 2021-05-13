@@ -2,11 +2,14 @@
     margin:0;
     padding:0;
 }
-p{/*no se si a esto tendré que cambiarle el selector para el resto de páginas*/
+.container-fluid{
+    padding:0;
+}
+p{
     text-align:justify;
 }
 header nav, .dropdown-menu[data-bs-popper]{
-    background-color:lightgreen;
+    background-color:#90ee90;
 }
 .navbar{
     padding:0;
@@ -19,15 +22,15 @@ header nav, .dropdown-menu[data-bs-popper]{
     font-weight:bold;
 }
 ul li .active:hover, ul li .active:active{
-    color:#dc3545!important;
+    background-color:#ff6347!important;
+    color:#90ee90!important;
 }
 header .logo{
-    /*max-width:10rem;*/
-    width:10vw;
+    max-width:5rem;
 }
 footer .logo{
     max-width:15rem;
-    background-color:white;
+    background-color:#ffffff;
     border-radius:10rem;
 }
 .logo img{
@@ -37,14 +40,14 @@ footer .logo{
     padding:0.5rem;
 }
 .nav-link:hover, .dropdown-item:hover{
-    background-color: tomato;
-    color: lightgreen!important;
+    background-color: #ff6347;
+    color: #90ee90!important;
 }
 .dropdown-item.active, .dropdown-item:active{
-    background-color:lightgreen;
+    background-color:#90ee90;
 }
 #carouselExampleSlidesOnly img{
-    height:15rem;/**/
+    height:15rem;
 }
 main{
     margin-bottom:0.5rem;
@@ -76,7 +79,7 @@ article{
     width:75%;
     display:flex;
     flex-direction:column;
-    align-items:center;/*Esto hace  ue los P de la home algunos se queden mas centrados ya que nos son tan largos*/
+    align-items:center;
 }
 article img{
     border-radius:5vw;
@@ -88,8 +91,8 @@ article img{
     min-width:90%;
 }
 #verde{
-    background-color:lightgreen;
-    border:solid 2px black;
+    background-color:#90ee90;
+    border:solid 2px #000000;
 }
 #verde h1{
     margin-top:0;
@@ -118,13 +121,21 @@ form p{
     align-items:center;
 }
 #horario p{
-    margin:auto 0;
-    padding-left:0.5rem;
-    width:65%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+#horario p:nth-child(2n+3) span:nth-child(2){
+    display:none;
+}
+#horario p:nth-child(1n+2){
+    font-size:1.5rem;
+}
+#horario p:nth-child(2n+2){
+    font-weight:bold;
 }
 #horario p:nth-child(2n){
-    background-color:green;
-    padding-left:1rem;
+    margin-top:0.5rem;
 }
 #motivos{
     display:flex;
@@ -160,12 +171,13 @@ textarea{
     display:flex;
     align-items:center;
 }
+#pagination{
+    display: flex;
+    justify-content: center;
+}
 table{
     text-align: center;
 }
-/*#modificaciones table{
-    max-width:10%;
-}*/
 #reservas article{
     display:inline;
 }
@@ -181,7 +193,7 @@ table{
 }
 footer{
     padding:0.5rem;
-    color:lightgreen;
+    color:#90ee90;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -197,21 +209,8 @@ footer > section:nth-child(1n){
 #menus nav:nth-child(1){
     margin-right:2rem;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 footer nav a{
-    color:lightgreen;
+    color:#90ee90;
 }
 #redesSociales{
     display:flex;
@@ -221,6 +220,9 @@ footer nav a{
     max-width:3rem;
 }
 @media (min-width:576px){
+    header .logo{
+        max-width:10rem;
+    }
     header nav, .dropdown-menu[data-bs-popper]{
         font-size:2vw;
     }
@@ -233,32 +235,38 @@ footer nav a{
         justify-content:space-around;
         align-items:stretch;
     }
-    
     #contacto #verde{
         min-width:auto;
     }
     article,#contacto #verde{
         width:45%;
     }
-    
     .altura{
         height:15rem;
     }
     #horario p{
-        width:50%;
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+    }
+    #horario p:nth-child(1){
+        display: inline;
+    }
+    #horario p:nth-child(2n+3) span:nth-child(2){
+        display:block;
     }
     #login, #crearUsuario, #cuenta, #reservas, #admin{
         text-align:center;
         flex-direction:column;
         align-items:center;
     }
+    #administracion{
+        width:100%;
+    }
     #administracion form{
         width:100%;
         flex-direction:row;
         justify-content:space-around;
-    }
-    #administracion{
-        width:100%;
     }
     form p{
         flex-direction:row;
@@ -276,20 +284,17 @@ footer nav a{
         font-size:1.5vw;
     }
     #carouselExampleSlidesOnly img{
-        height:25rem;/**/
+        height:25rem;
     }
 }
-/*Añadido para controlar los cuadros verdes*/
 @media (min-width:992px){
-    #horario p{
-        max-width:35%;
-    }
+    
 }
 @media (min-width:1024px){
     .altura{
         height:20rem;
     }
     #carouselExampleSlidesOnly img{
-        height:35rem;/**/
+        height:35rem;
     }
 }

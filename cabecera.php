@@ -58,7 +58,7 @@ if (isset($_GET['p'])&&$_GET['p']=="administracion") {
 </head>
 
 <body>
-    <header class=".container-fluid">
+    <header class="container-fluid">
         <!--MENU-->
         <nav class="navbar navbar-expand-sm navbar-light margenes-menu">
             <div class="container-fluid">
@@ -115,19 +115,19 @@ if (isset($_GET['p'])&&$_GET['p']=="administracion") {
         <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="img/carrusel1.jpeg" class="d-block w-100" alt="">
+                    <img src="img/carrusel1.jpeg" class="d-block w-100" alt="Peluquería Unisex 'La Gallega'">
                 </div>
                 <div class="carousel-item">
-                    <img src="img/carrusel2.jpeg" class="d-block w-100" alt="">
+                    <img src="img/carrusel2.jpeg" class="d-block w-100" alt="Peluquería Unisex 'La Gallega'">
                 </div>
                 <div class="carousel-item">
-                    <img src="img/carrusel3.jpeg" class="d-block w-100" alt="">
+                    <img src="img/carrusel3.jpeg" class="d-block w-100" alt="Peluquería Unisex 'La Gallega'">
                 </div>
                 <div class="carousel-item">
-                    <img src="img/carrusel4.jpeg" class="d-block w-100" alt="">
+                    <img src="img/carrusel4.jpeg" class="d-block w-100" alt="Peluquería Unisex 'La Gallega'">
                 </div>
                 <div class="carousel-item">
-                    <img src="img/carrusel5.jpeg" class="d-block w-100" alt="">
+                    <img src="img/carrusel5.jpeg" class="d-block w-100" alt="Peluquería Unisex 'La Gallega'">
                 </div>
             </div>
         </div>
